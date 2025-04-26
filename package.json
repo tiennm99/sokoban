@@ -1,19 +1,19 @@
 {
-  "name": "template-vite",
-  "description": "A Phaser 3 template using Vite.",
-  "version": "1.4.0",
+  "name": "sokoban",
+  "description": "A simple Sokoban game built with Phaser 3 and Vite",
+  "version": "1.0.0",
   "type": "module",
   "repository": {
       "type": "git",
-      "url": "git+https://github.com/phaserjs/template-vite.git"
+      "url": "git+https://github.com/tiennm99/sokoban.git"
   },
-  "author": "Phaser Studio <support@phaser.io> (https://phaser.io/)",
+  "author": "tiennm99",
   "license": "MIT",
   "licenseUrl": "http://www.opensource.org/licenses/mit-license.php",
   "bugs": {
-      "url": "https://github.com/phaserjs/template-vite/issues"
+      "url": "https://github.com/tiennm99/sokoban/issues"
   },
-  "homepage": "https://github.com/phaserjs/template-vite#readme",
+  "homepage": "https://tiennm99.github.io/sokoban/",
   "scripts": {
       "dev": "node log.js dev & vite --config vite/config.dev.mjs",
       "build": "node log.js build & vite build --config vite/config.prod.mjs",
