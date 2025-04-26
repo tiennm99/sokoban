@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import game from '../main.js';
+import { getAssetPath } from '../utils/assetUtils.js';
 
 class MainScene extends Phaser.Scene {
     constructor() {
@@ -33,9 +34,9 @@ class MainScene extends Phaser.Scene {
 
     preload() {
         // Load level data
-        this.load.json('level1', 'public/assets/levels/level1.json');
-        this.load.json('level2', 'public/assets/levels/level2.json');
-        this.load.json('level3', 'public/assets/levels/level3.json');
+        this.load.json('level1', getAssetPath('assets/levels/level1.json'));
+        this.load.json('level2', getAssetPath('assets/levels/level2.json'));
+        this.load.json('level3', getAssetPath('assets/levels/level3.json'));
     }
 
     create() {

@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import game from '../main.js';
+import { getAssetPath } from '../utils/assetUtils.js';
 
 class LevelScene extends Phaser.Scene {
     constructor() {
