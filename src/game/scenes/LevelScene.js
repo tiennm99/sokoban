@@ -1,14 +1,8 @@
 import Phaser from 'phaser';
-import game from '../main.js';
-import { getAssetPath } from '../utils/assetUtils.js';
 
 class LevelScene extends Phaser.Scene {
     constructor() {
         super({ key: 'LevelScene' });
-    }
-
-    preload() {
-        // Load any assets needed for the level selection
     }
 
     create() {
@@ -67,7 +61,12 @@ class LevelScene extends Phaser.Scene {
         const startX = this.cameras.main.centerX - buttonWidth - padding / 2;
         const startY = this.cameras.main.centerY - buttonHeight / 2;
 
-        for (let i = 0; i < game.globals.totalLevels; i++) {
+        // Access gameState through the registry instead of globals
+        const gameState = this.game.registry.get('gameState');
+        const totalLevels = gameState.totalLevels;
+        const levelCompleted = gameState.levelCompleted;
+
+        for (let i = 0; i < totalLevels; i++) {
             const x = startX + (i % 3) * (buttonWidth + padding);
             const y = startY + Math.floor(i / 3) * (buttonHeight + padding);
 
@@ -77,7 +76,7 @@ class LevelScene extends Phaser.Scene {
                 y + buttonHeight / 2,
                 buttonWidth,
                 buttonHeight,
-                game.globals.levelCompleted[i] ? 0x4CAF50 : 0x3498db
+                levelCompleted[i] ? 0x4CAF50 : 0x3498db
             );
             buttonBg.setInteractive({ useHandCursor: true });
 
@@ -96,17 +95,18 @@ class LevelScene extends Phaser.Scene {
 
             // Add click event
             buttonBg.on('pointerdown', () => {
-                game.globals.currentLevel = i;
+                // Update currentLevel in gameState
+                this.game.registry.get('updateGameState')({ currentLevel: i });
                 this.scene.start('MainScene');
             });
 
             // Add hover effect
             buttonBg.on('pointerover', () => {
-                buttonBg.setFillStyle(game.globals.levelCompleted[i] ? 0x45a049 : 0x2980b9);
+                buttonBg.setFillStyle(levelCompleted[i] ? 0x45a049 : 0x2980b9);
             });
 
             buttonBg.on('pointerout', () => {
-                buttonBg.setFillStyle(game.globals.levelCompleted[i] ? 0x4CAF50 : 0x3498db);
+                buttonBg.setFillStyle(levelCompleted[i] ? 0x4CAF50 : 0x3498db);
             });
         }
     }

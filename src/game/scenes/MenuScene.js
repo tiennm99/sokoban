@@ -1,5 +1,4 @@
 import Phaser from 'phaser';
-import { getAssetPath } from '../utils/assetUtils.js';
 
 class MenuScene extends Phaser.Scene {
     constructor() {

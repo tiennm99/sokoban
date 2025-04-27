@@ -1,6 +1,5 @@
 import Phaser from 'phaser';
 import game from '../main.js';
-import { getAssetPath } from '../utils/assetUtils.js';
 
 class MainScene extends Phaser.Scene {
     constructor() {
@@ -34,9 +33,9 @@ class MainScene extends Phaser.Scene {
 
     preload() {
         // Load level data
-        this.load.json('level1', getAssetPath('assets/levels/level1.json'));
-        this.load.json('level2', getAssetPath('assets/levels/level2.json'));
-        this.load.json('level3', getAssetPath('assets/levels/level3.json'));
+        this.load.json('level1', 'assets/levels/level1.json');
+        this.load.json('level2', 'assets/levels/level2.json');
+        this.load.json('level3', 'assets/levels/level3.json');
     }
 
     create() {
@@ -70,8 +69,11 @@ class MainScene extends Phaser.Scene {
         });
 
         try {
+            // Get game state from registry
+            const gameState = this.game.registry.get('gameState');
+
             // Load level data
-            const levelNumber = game.globals.currentLevel + 1;
+            const levelNumber = gameState.currentLevel + 1;
             this.levelData = this.cache.json.get(`level${levelNumber}`);
 
             if (!this.levelData || !this.levelData.tiles) {
@@ -255,11 +257,14 @@ class MainScene extends Phaser.Scene {
     }
 
     createUI() {
+        // Get game state from registry
+        const gameState = this.game.registry.get('gameState');
+
         // Add level text
         const levelText = this.add.text(
             20,
             20,
-            `LEVEL ${game.globals.currentLevel + 1}`,
+            `LEVEL ${gameState.currentLevel + 1}`,
             {
                 fontSize: '24px',
                 fill: '#000'
@@ -503,8 +508,16 @@ class MainScene extends Phaser.Scene {
         });
 
         if (allBoxesOnTargets && this.boxes.getChildren().length > 0) {
-            // Mark level as completed
-            game.globals.levelCompleted[game.globals.currentLevel] = true;
+            // Get current game state and update function from registry
+            const gameState = this.game.registry.get('gameState');
+            const updateGameState = this.game.registry.get('updateGameState');
+
+            // Create new levelCompleted array with current level marked as completed
+            const levelCompleted = [...gameState.levelCompleted];
+            levelCompleted[gameState.currentLevel] = true;
+
+            // Update the game state
+            updateGameState({ levelCompleted });
 
             // Show win message
             const winText = this.add.text(
