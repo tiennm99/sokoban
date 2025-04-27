@@ -13,12 +13,8 @@ class MainScene extends Phaser.Scene {
 
         // Controls
         this.cursors = null;
-        this.keyState = {
-            up: false,
-            down: false,
-            left: false,
-            right: false
-        };
+        this.lastKeyPressed = 0; // Add timestamp for key press tracking
+        this.keyDelay = 150; // Minimum delay between key presses in milliseconds
 
         // Level data
         this.levelData = null;
@@ -31,6 +27,18 @@ class MainScene extends Phaser.Scene {
         this.tileSize = 64;
     }
 
+    init() {
+        // Reset all state variables when scene initializes
+        this.player = null;
+        this.walls = null;
+        this.boxes = null;
+        this.targets = null;
+        this.cursors = null;
+        this.isMoving = false;
+        this.lastKeyPressed = 0;
+        this.levelData = null;
+    }
+
     preload() {
         // Load level data
         this.load.json('level1', 'assets/levels/level1.json');
@@ -39,34 +47,8 @@ class MainScene extends Phaser.Scene {
     }
 
     create() {
-        // Set up controls
+        // Set up controls - using Phaser's built-in cursor keys
         this.cursors = this.input.keyboard.createCursorKeys();
-
-        // Reset key state
-        this.keyState = {
-            up: false,
-            down: false,
-            left: false,
-            right: false
-        };
-
-        // Set up key release listeners
-        this.input.keyboard.on('keyup', (event) => {
-            switch (event.keyCode) {
-                case 37: // Left
-                    this.keyState.left = false;
-                    break;
-                case 38: // Up
-                    this.keyState.up = false;
-                    break;
-                case 39: // Right
-                    this.keyState.right = false;
-                    break;
-                case 40: // Down
-                    this.keyState.down = false;
-                    break;
-            }
-        });
 
         try {
             // Get game state from registry
@@ -142,19 +124,23 @@ class MainScene extends Phaser.Scene {
         // Skip if player is already moving or player is not defined
         if (this.isMoving || !this.player) return;
 
-        // Handle player movement with key state tracking
-        if (this.cursors.left.isDown && !this.keyState.left) {
-            this.keyState.left = true;
-            this.movePlayer(-1, 0);
-        } else if (this.cursors.right.isDown && !this.keyState.right) {
-            this.keyState.right = true;
-            this.movePlayer(1, 0);
-        } else if (this.cursors.up.isDown && !this.keyState.up) {
-            this.keyState.up = true;
-            this.movePlayer(0, -1);
-        } else if (this.cursors.down.isDown && !this.keyState.down) {
-            this.keyState.down = true;
-            this.movePlayer(0, 1);
+        const currentTime = Date.now();
+
+        // Only process input if enough time has passed since last key press
+        if (currentTime - this.lastKeyPressed >= this.keyDelay) {
+            if (this.cursors.left.isDown) {
+                this.movePlayer(-1, 0);
+                this.lastKeyPressed = currentTime;
+            } else if (this.cursors.right.isDown) {
+                this.movePlayer(1, 0);
+                this.lastKeyPressed = currentTime;
+            } else if (this.cursors.up.isDown) {
+                this.movePlayer(0, -1);
+                this.lastKeyPressed = currentTime;
+            } else if (this.cursors.down.isDown) {
+                this.movePlayer(0, 1);
+                this.lastKeyPressed = currentTime;
+            }
         }
 
         // Check win condition
@@ -568,16 +554,35 @@ class MainScene extends Phaser.Scene {
     }
 
     shutdown() {
-        // Clean up event listeners
-        this.input.keyboard.off('keyup');
+        // Clean up physics
+        if (this.physics && this.physics.world) {
+            this.physics.world.shutdown();
+        }
 
-        // Reset key state
-        this.keyState = {
-            up: false,
-            down: false,
-            left: false,
-            right: false
-        };
+        // Destroy all game objects
+        if (this.player) this.player.destroy();
+        if (this.walls) this.walls.destroy(true);
+        if (this.boxes) this.boxes.destroy(true);
+        if (this.targets) this.targets.destroy(true);
+
+        // Reset all state variables
+        this.player = null;
+        this.walls = null;
+        this.boxes = null;
+        this.targets = null;
+        this.cursors = null;
+        this.isMoving = false;
+        this.lastKeyPressed = 0;
+        this.levelData = null;
+
+        // Remove all input listeners
+        this.input.keyboard.removeAllKeys(true);
+        this.input.keyboard.removeAllListeners();
+    }
+
+    destroy() {
+        this.shutdown();
+        super.destroy();
     }
 }
 export default MainScene;

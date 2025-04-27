@@ -97,6 +97,11 @@ class LevelScene extends Phaser.Scene {
             buttonBg.on('pointerdown', () => {
                 // Update currentLevel in gameState
                 this.game.registry.get('updateGameState')({ currentLevel: i });
+
+                // Stop and restart MainScene before starting it
+                if (this.scene.get('MainScene').scene.isActive()) {
+                    this.scene.stop('MainScene');
+                }
                 this.scene.start('MainScene');
             });
 
