@@ -38,4 +38,5 @@ See [`docs/codebase-summary.md`](docs/codebase-summary.md).
 - Engine: [Phaser 3](https://phaser.io/).
 
 ## License
-MIT — see `LICENSE`.
+- Source code: see [`LICENSE`](LICENSE).
+- Puzzle layouts (Microban): see [`LICENSE-LEVELS.md`](LICENSE-LEVELS.md) — Skinner's free-distribution-with-credit terms, not the main project license.
