@@ -8,8 +8,8 @@
       "url": "git+https://github.com/tiennm99/sokoban.git"
   },
   "author": "tiennm99",
-  "license": "MIT",
-  "licenseUrl": "http://www.opensource.org/licenses/mit-license.php",
+  "license": "Apache-2.0",
+  "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
   "bugs": {
       "url": "https://github.com/tiennm99/sokoban/issues"
   },
