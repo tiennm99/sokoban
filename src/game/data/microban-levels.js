@@ -1,7 +1,9 @@
 /**
- * Microban level set by David W. Skinner (April 2000, 155 puzzles).
- * Freely distributable with credit. First 100 levels shipped here — small,
- * concept-focused puzzles that are great for beginners and still interesting.
+ * Puzzle layouts from the Microban level set by David W. Skinner
+ * (April 2000, 155 puzzles, freely distributable with credit).
+ * First 100 layouts shipped here — small, concept-focused puzzles.
+ * Only the level designs are borrowed; the parser, renderer, and engine
+ * are original code written for this project.
  * Source: http://users.bentonrea.com/~sasquatch/sokoban/
  *
  * Format: XSB

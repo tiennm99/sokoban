@@ -1,7 +1,7 @@
 # Sokoban — Product Development Record
 
 ## What it is
-Browser-based Sokoban puzzle game. 100 solvable Microban levels (David W. Skinner, freely distributable), Phaser 3 + Vite, deployed to GitHub Pages.
+A from-scratch Sokoban implementation by tiennm99. Phaser 3 + Vite, deployed to GitHub Pages. The engine, UI, parser, and progression system are original code. Puzzle layouts come from David W. Skinner's freely distributable **Microban** set (100 of his puzzles shipped) — layouts only, no code reused from Skinner's own programs.
 
 ## Goals
 - Clean, beginner-friendly Sokoban that runs in any modern browser with no install.
@@ -24,5 +24,6 @@ Casual puzzle fans, Sokoban beginners. Microban set chosen specifically because 
 - Runs smoothly on desktop browsers at 1024×768 canvas (scaled responsively).
 
 ## Credits
-- Puzzles: Microban by David W. Skinner (April 2000). Used per the collection's free-distribution terms with credit.
+- Puzzle layouts: Microban by David W. Skinner (April 2000). Used per the collection's free-distribution terms with credit. Only the level designs — none of Skinner's code.
+- Game code: tiennm99 (with AI pair-programming from Claude).
 - Engine: Phaser 3.

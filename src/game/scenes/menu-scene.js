@@ -19,7 +19,7 @@ export default class MenuScene extends Phaser.Scene {
         const cy = this.cameras.main.centerY;
 
         this.add.text(cx, cy - 200, 'SOKOBAN', FONTS.title).setOrigin(0.5);
-        this.add.text(cx, cy - 130, '100 Microban puzzles', FONTS.subtitle).setOrigin(0.5);
+        this.add.text(cx, cy - 130, '100 puzzles to solve', FONTS.subtitle).setOrigin(0.5);
 
         createButton(this, cx, cy - 20, 'PLAY', () => this.scene.start('LevelScene'), { width: 240, height: 64 });
 
@@ -33,6 +33,6 @@ export default class MenuScene extends Phaser.Scene {
         ].join('\n');
         this.add.text(cx, cy + 170, hints, { ...FONTS.small, align: 'center' }).setOrigin(0.5);
 
-        this.add.text(cx, this.cameras.main.height - 24, 'Microban puzzles by David W. Skinner', FONTS.small).setOrigin(0.5);
+        this.add.text(cx, this.cameras.main.height - 24, 'Level layouts from Microban by David W. Skinner', FONTS.small).setOrigin(0.5);
     }
 }
