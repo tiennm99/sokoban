@@ -1,5 +1,26 @@
 # Project Changelog
 
+## 2026-04-12 — Svelte rewrite
+
+### Changed
+- **Replaced Phaser 3 with Svelte 5** as the rendering and UI layer. The game is now a static DOM app — native `<button>` elements, CSS grid board, `transform` animations with CSS transitions.
+- Bundle shrinks from ~1.5 MB Phaser to **65 kB JS / 23 kB gzipped** (about 60× smaller).
+- New layout: `src/App.svelte`, `src/views/*.svelte`, `src/lib/core/`, `src/lib/data/`. Framework-agnostic core modules (`level-parser`, `board-model`, `progress-store`, `microban-levels`) moved from `src/game/core` → `src/lib/core` with zero code changes.
+- Theme moved from a JS `theme.js` module into CSS custom properties in `src/app.css`.
+- Native buttons replace the bespoke Phaser button factory — click reliability is now a browser concern, not ours.
+- Vite configs cleaned up: removed Phaser-specific `manualChunks`, the terser block, and the `phasermsg` plugin.
+- `npm run dev` / `npm run build` no longer wrap `node log.js` (Phaser analytics ping removed).
+
+### Added
+- `src/views/AppButton.svelte` — shared themed button, wraps native `<button>` with hover, focus-visible, and disabled styles.
+- `src/views/Board.svelte` — presentational DOM renderer: floor, walls, targets, boxes, player, each via absolute positioning inside a sized container.
+- Live `resize` listener in `GameView.svelte` so tile size re-computes when the window changes.
+
+### Removed
+- `phaser` dependency, `terser` devDependency.
+- `src/game/` (old `main.js`, `scenes/`, `ui/`, `core/theme.js`).
+- `log.js` (Phaser analytics ping).
+
 ## 2026-04-11 — Full Microban set
 
 ### Changed

@@ -1,5 +1,11 @@
 # Development Roadmap
 
+## Phase 0 — Svelte rewrite (complete, 2026-04-12)
+- Replace Phaser 3 with Svelte 5 — native DOM buttons, CSS grid board, transform-based animations.
+- 60× smaller bundle (~25 kB gzipped vs ~1.5 MB).
+- Core modules (parser, board model, progress store, level data) moved verbatim into `src/lib/`.
+- Nord theme moved into CSS custom properties.
+
 ## Phase 1 — Core game (complete)
 - Phaser + Vite scaffolding.
 - Menu / Level / Game scenes.

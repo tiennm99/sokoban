@@ -1,7 +1,11 @@
-import StartGame from './game/main';
+/**
+ * Entry point: mounts the Svelte app into #app.
+ */
 
-document.addEventListener('DOMContentLoaded', () => {
+import { mount } from 'svelte';
+import './app.css';
+import App from './App.svelte';
 
-    StartGame('game-container');
+const app = mount(App, { target: document.getElementById('app') });
 
-});
+export default app;

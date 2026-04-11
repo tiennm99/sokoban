@@ -3,41 +3,45 @@
 ## Layout
 ```
 src/
-├── main.js                         # Entry: boots Phaser on #game-container
-└── game/
-    ├── main.js                     # Phaser Game config + scene registration
-    ├── data/
-    │   └── microban-levels.js      # 155 XSB level strings (full Microban set)
-    ├── core/
-    │   ├── level-parser.js         # XSB text → {walls, targets, boxes, player, floors}
-    │   ├── board-model.js          # Pure game state + move/undo/win logic
-    │   ├── progress-store.js       # localStorage persistence (completed + best moves)
-    │   └── theme.js                # Nord color palette, fonts, tile-size helper
-    ├── ui/
-    │   ├── button-factory.js       # Reusable rounded button with hover/press
-    │   └── board-renderer.js       # Draws the board + animates moves
-    └── scenes/
-        ├── menu-scene.js           # Title, play, progress counter, keybinds
-        ├── level-scene.js          # Paginated 5×4 level grid (5 pages × 20)
-        └── game-scene.js           # Gameplay: input, HUD, win overlay
+├── main.js                         # Mounts App.svelte into #app
+├── App.svelte                      # Root router: menu / levels / game
+├── app.css                         # Nord palette (CSS variables) + resets
+├── lib/
+│   ├── core/
+│   │   ├── level-parser.js         # XSB text → {walls, targets, boxes, player, floors}
+│   │   ├── board-model.js          # Pure game state + move/undo/win logic
+│   │   └── progress-store.js       # localStorage persistence (completed + best moves)
+│   └── data/
+│       └── microban-levels.js      # 155 XSB level strings (Microban, D. W. Skinner)
+└── views/
+    ├── MenuView.svelte             # Title, play, progress, hints
+    ├── LevelSelectView.svelte      # Paginated 5×4 grid (20/page × 8 pages)
+    ├── GameView.svelte              # Board + HUD + win overlay + input
+    ├── Board.svelte                # Presentational DOM board (div-per-tile)
+    └── AppButton.svelte             # Shared themed button (wraps native <button>)
 
 public/
-├── style.css                       # Page background + container shadow
+├── style.css                       # Legacy file — theme now lives in src/app.css
 ├── favicon.png
-└── assets/                         # bg.png, logo.png (reserved for future use)
+└── assets/                         # bg.png, logo.png (unused, reserved)
 ```
 
 ## Data flow
-1. `main.js` creates the Phaser Game with Menu / Level / Game scenes.
-2. `level-scene` writes `registry.currentLevel` on click, starts `GameScene`.
-3. `game-scene` reads the level index, calls `parseLevel()` on the XSB string, builds a `BoardModel`, hands it to `BoardRenderer`.
-4. Input → `BoardModel.tryMove()` → `BoardRenderer.animateMove()` → win check → `progressStore.recordCompletion()`.
+1. `src/main.js` mounts `App.svelte`.
+2. `App.svelte` holds `view` and `levelIndex` state and renders one of three view components.
+3. `MenuView` → calls `onPlay()` → App switches to `LevelSelectView`.
+4. `LevelSelectView` reads completion + best-move data from `progressStore`, renders a paginated grid, calls `onSelect(i)` on click.
+5. `GameView` is keyed on `levelIndex` (`{#key levelIndex}` in App) so every level change remounts it with fresh state.
+6. Inside `GameView`: `parseLevel(xsb) → new BoardModel(level)`, keyboard input calls `model.tryMove()` / `model.undo()`, after each mutation `syncFromModel()` reassigns the `$state` snapshots that `Board` reads as props.
+7. On win: `progressStore.recordCompletion()` + overlay with NEXT / LEVELS actions.
 
 ## Key design choices
-- **XSB at runtime**: levels are stored as the standard Sokoban text format; the parser flood-fills interior floor tiles so the renderer only paints inside the puzzle shape.
-- **Pure `BoardModel`**: move/undo/win logic has zero Phaser dependencies — trivial to unit-test later.
-- **No Arcade physics**: the original version wired colliders but moved sprites by tween; the physics system did nothing. Removed.
-- **One button factory**: every scene goes through `createButton()` so hover/press feels identical everywhere.
+- **Framework-agnostic core.** `level-parser.js`, `board-model.js`, `progress-store.js`, and `microban-levels.js` contain zero Svelte — they could be lifted into any other stack.
+- **BoardModel as a non-reactive ref.** Svelte reactivity is driven by plain `$state` snapshot fields (`player`, `boxes`, `moves`, `won`) that `syncFromModel()` reassigns after every mutation. Cleaner than making the class instance itself reactive.
+- **Board is purely presentational.** Takes plain props (`walls`, `targets`, `floors`, `player`, `boxes`, `tileSize`) so Svelte reactivity is predictable.
+- **Animations via CSS.** Box and player use `transform: translate()` with `transition: transform 110ms ease`. No JS animation loop.
+- **Responsive tile sizing.** `GameView.computeTileSize()` picks a tile size that fits the level inside the viewport, capped at 56 px.
+- **Scoped CSS per component.** Svelte SFCs keep markup, style, and logic co-located and isolate styles to the component that owns them.
 
-## File size budget
-Every file under 200 LOC per development rules. Data file (`microban-levels.js`) exceeds that because it's pure data, not logic.
+## File size
+Every `.js` / `.svelte` file is under the 200-LOC budget, except `microban-levels.js` which is pure data (155 XSB strings) and exempt.

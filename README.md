@@ -1,6 +1,6 @@
 # Sokoban
 
-My from-scratch Sokoban game, built with Phaser 3 and Vite. The engine, UI, level parser, and progression system are all my own implementation. The puzzle layouts themselves come from David W. Skinner's freely distributable **Microban** set — I'm not reusing any of his code, only his level designs.
+My from-scratch Sokoban game, built with **Svelte 5** and **Vite**. The engine, UI, level parser, and progression system are all my own implementation. The puzzle layouts themselves come from David W. Skinner's freely distributable **Microban** set — I'm not reusing any of his code, only his level designs.
 
 Play: [https://tiennm99.github.io/sokoban/](https://tiennm99.github.io/sokoban/)
 
@@ -18,8 +18,6 @@ Play: [https://tiennm99.github.io/sokoban/](https://tiennm99.github.io/sokoban/)
 npm install
 npm run dev          # dev server on http://localhost:8080
 npm run build        # production build
-npm run dev-nolog    # dev without the analytics ping
-npm run build-nolog  # build without the analytics ping
 ```
 
 ## Project layout
@@ -35,7 +33,7 @@ See [`docs/codebase-summary.md`](docs/codebase-summary.md).
 ## Credits
 - Puzzle layouts: **Microban** level set by David W. Skinner (April 2000). Freely distributable with credit. Original site: http://users.bentonrea.com/~sasquatch/sokoban/
 - Game code: tiennm99 (with AI pair-programming from Claude).
-- Engine: [Phaser 3](https://phaser.io/).
+- Framework: [Svelte 5](https://svelte.dev/) on top of [Vite](https://vite.dev/).
 
 ## License
 - Source code: see [`LICENSE`](LICENSE).

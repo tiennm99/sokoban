@@ -1,0 +1,102 @@
+/* Nord palette + resets + global layout */
+
+:root {
+    --bg: #2E3440;
+    --bg-deep: #1c2230;
+    --panel: #3B4252;
+    --panel-hover: #434C5E;
+    --border: #4C566A;
+    --floor: #4C566A;
+    --floor-alt: #434C5E;
+    --wall: #1B1F27;
+    --wall-edge: #2E3440;
+    --player: #88C0D0;
+    --player-edge: #5E81AC;
+    --box: #D08770;
+    --box-edge: #BF616A;
+    --box-done: #A3BE8C;
+    --box-done-edge: #6A8E5C;
+    --target: #EBCB8B;
+    --text: #ECEFF4;
+    --text-muted: #D8DEE9;
+    --text-dim: #81A1C1;
+    --accent: #88C0D0;
+    --success: #A3BE8C;
+    --danger: #BF616A;
+
+    --tile: 48px;
+
+    --radius-sm: 6px;
+    --radius: 10px;
+    --radius-lg: 16px;
+
+    --font: 'Trebuchet MS', system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+
+    color-scheme: dark;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    background: radial-gradient(circle at 30% 20%, var(--bg) 0%, var(--bg-deep) 60%, #0f131c 100%);
+    color: var(--text);
+    font-family: var(--font);
+    -webkit-font-smoothing: antialiased;
+}
+
+#app {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+}
+
+button {
+    font-family: inherit;
+}
+
+h1, h2, h3, p {
+    margin: 0;
+}
+
+/* Reusable screen wrapper every view uses */
+.screen {
+    width: 100%;
+    max-width: 960px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+.screen-title {
+    font-size: 48px;
+    letter-spacing: 2px;
+    font-weight: 800;
+    color: var(--text);
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
+}
+
+.screen-subtitle {
+    font-size: 18px;
+    color: var(--text-muted);
+}
+
+.hint {
+    font-size: 14px;
+    color: var(--text-dim);
+    text-align: center;
+    line-height: 1.6;
+}
+
+.credit {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 8px;
+}

@@ -1,0 +1,253 @@
+<!--
+    Gameplay screen: parses the current level, holds the BoardModel,
+    wires keyboard input, renders HUD + Board + win overlay.
+-->
+<script>
+    import AppButton from './AppButton.svelte';
+    import Board from './Board.svelte';
+    import { parseLevel } from '../lib/core/level-parser.js';
+    import { BoardModel } from '../lib/core/board-model.js';
+    import { progressStore } from '../lib/core/progress-store.js';
+    import { MICROBAN_LEVELS } from '../lib/data/microban-levels.js';
+
+    let { levelIndex, onMenu, onLevels, onNext } = $props();
+
+    // --- Level setup (runs once because GameView is keyed on levelIndex in App) ---
+    function buildLevel() {
+        try {
+            const lv = parseLevel(MICROBAN_LEVELS[levelIndex]);
+            if (!lv.player) throw new Error('Level has no player tile');
+            return { level: lv, model: new BoardModel(lv), error: null };
+        } catch (err) {
+            console.error('Failed to load level', levelIndex + 1, err);
+            return { level: null, model: null, error: `Failed to load level ${levelIndex + 1}` };
+        }
+    }
+
+    const built = buildLevel();
+    const level = built.level;
+    // Non-reactive ref: the BoardModel is mutated internally and reassigned
+    // on restart, but re-renders are driven by the $state snapshots below,
+    // not by reading model directly in the template.
+    let model = built.model;
+    let parseError = $state(built.error);
+
+    // Responsive tile size: fill the viewport with a cap so small puzzles
+    // don't look comically huge and the two giant finale mazes still fit.
+    function computeTileSize() {
+        if (!level) return 48;
+        const maxTile = 56;
+        const minTile = 16;
+        const margin = 140; // header + hud + padding
+        const maxByWidth = Math.floor((window.innerWidth - 80) / level.width);
+        const maxByHeight = Math.floor((window.innerHeight - margin - 100) / level.height);
+        return Math.max(minTile, Math.min(maxTile, maxByWidth, maxByHeight));
+    }
+
+    let tileSize = $state(computeTileSize());
+
+    // --- Reactive state: read by Board.svelte ---
+    let player = $state(level ? { x: model.player.x, y: model.player.y } : { x: 0, y: 0 });
+    let boxes = $state(level
+        ? model.boxes.map((b, i) => ({ id: i, x: b.x, y: b.y, onTarget: model.isTarget(b.x, b.y) }))
+        : []);
+    let moves = $state(0);
+    let won = $state(false);
+    const best = $derived(progressStore.getBestMoves(levelIndex));
+
+    function syncFromModel() {
+        player = { x: model.player.x, y: model.player.y };
+        boxes = model.boxes.map((b, i) => ({ id: i, x: b.x, y: b.y, onTarget: model.isTarget(b.x, b.y) }));
+        moves = model.moveCount;
+        if (model.isSolved() && !won) {
+            won = true;
+            progressStore.recordCompletion(levelIndex, moves);
+        }
+    }
+
+    function tryMove(dx, dy) {
+        if (won || !model) return;
+        if (model.tryMove(dx, dy)) syncFromModel();
+    }
+
+    function undo() {
+        if (won || !model) return;
+        if (model.undo()) syncFromModel();
+    }
+
+    function restart() {
+        if (!level) return;
+        model = new BoardModel(level);
+        won = false;
+        syncFromModel();
+    }
+
+    // --- Keyboard input with a soft repeat gate so held keys feel right ---
+    const REPEAT_MS = 130;
+    let lastKeyAt = 0;
+
+    function onKey(e) {
+        if (e.key === 'Escape') { onLevels(); return; }
+        if (e.key === 'r' || e.key === 'R') { restart(); return; }
+        if (e.key === 'u' || e.key === 'U' || e.key === 'z' || e.key === 'Z') { undo(); return; }
+
+        const now = performance.now();
+        if (now - lastKeyAt < REPEAT_MS) return;
+
+        let handled = true;
+        switch (e.key) {
+            case 'ArrowLeft':  case 'a': case 'A': tryMove(-1, 0); break;
+            case 'ArrowRight': case 'd': case 'D': tryMove(1, 0); break;
+            case 'ArrowUp':    case 'w': case 'W': tryMove(0, -1); break;
+            case 'ArrowDown':  case 's': case 'S': tryMove(0, 1); break;
+            default: handled = false;
+        }
+        if (handled) {
+            lastKeyAt = now;
+            e.preventDefault();
+        }
+    }
+
+    function onResize() {
+        tileSize = computeTileSize();
+    }
+
+    const hasNext = $derived(levelIndex + 1 < MICROBAN_LEVELS.length);
+</script>
+
+<svelte:window onkeydown={onKey} onresize={onResize} />
+
+<section class="screen game">
+    {#if parseError}
+        <p class="error">{parseError}</p>
+        <AppButton onclick={onMenu}>BACK TO MENU</AppButton>
+    {:else}
+        <header class="hud">
+            <div class="hud-left">
+                <div class="level-name">LEVEL {levelIndex + 1}</div>
+                <div class="stats">
+                    Moves: <strong>{moves}</strong>
+                    {#if best != null} &nbsp;·&nbsp; Best: <strong>{best}</strong>{/if}
+                </div>
+            </div>
+            <div class="hud-right">
+                <AppButton variant="ghost" size="sm" onclick={undo} title="Undo (U / Z)">UNDO</AppButton>
+                <AppButton variant="ghost" size="sm" onclick={restart} title="Restart (R)">RESTART</AppButton>
+                <AppButton variant="ghost" size="sm" onclick={onLevels} title="Back to levels (Esc)">LEVELS</AppButton>
+            </div>
+        </header>
+
+        <div class="board-wrap">
+            <Board
+                width={level.width}
+                height={level.height}
+                walls={level.walls}
+                targets={level.targets}
+                floors={level.floors}
+                {player}
+                {boxes}
+                {tileSize}
+            />
+        </div>
+
+        {#if won}
+            <div class="overlay">
+                <div class="dialog">
+                    <h2>LEVEL COMPLETE!</h2>
+                    <p class="final">Moves: <strong>{moves}</strong></p>
+                    <div class="dialog-actions">
+                        {#if hasNext}
+                            <AppButton onclick={onNext}>NEXT LEVEL</AppButton>
+                        {/if}
+                        <AppButton variant="ghost" onclick={onLevels}>LEVELS</AppButton>
+                    </div>
+                </div>
+            </div>
+        {/if}
+    {/if}
+</section>
+
+<style>
+    .game {
+        gap: 16px;
+    }
+
+    .hud {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .hud-left { display: flex; flex-direction: column; gap: 2px; }
+    .hud-right { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .level-name {
+        font-weight: 800;
+        font-size: 22px;
+        letter-spacing: 2px;
+    }
+
+    .stats {
+        font-size: 14px;
+        color: var(--text-muted);
+    }
+
+    .board-wrap {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .error {
+        color: var(--danger);
+        font-weight: 700;
+    }
+
+    .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(12, 16, 24, 0.72);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        animation: fade-in 180ms ease;
+    }
+
+    .dialog {
+        background: var(--panel);
+        border: 2px solid var(--accent);
+        border-radius: var(--radius-lg);
+        padding: 32px 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+    }
+
+    .dialog h2 {
+        font-size: 28px;
+        letter-spacing: 2px;
+        color: var(--success);
+    }
+
+    .final {
+        font-size: 16px;
+        color: var(--text-muted);
+    }
+
+    .dialog-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 8px;
+    }
+
+    @keyframes fade-in {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+</style>
