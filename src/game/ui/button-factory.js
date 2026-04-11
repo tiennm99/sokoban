@@ -29,6 +29,9 @@ export function createButton(scene, x, y, label, onClick, opts = {}) {
     const text = scene.add.text(0, 0, label, textStyle).setOrigin(0.5);
     container.add([bg, text]);
     container.setSize(width, height);
+    // Hit area is defined in the container's LOCAL coordinates and never
+    // scales with the container — this keeps clicks reliable even while the
+    // button is visually animating.
     container.setInteractive(
         new Phaser.Geom.Rectangle(-width / 2, -height / 2, width, height),
         Phaser.Geom.Rectangle.Contains
@@ -42,11 +45,10 @@ export function createButton(scene, x, y, label, onClick, opts = {}) {
         drawBg(fill);
         scene.input.setDefaultCursor('default');
     });
-    container.on('pointerdown', () => container.setScale(0.96));
-    container.on('pointerup', () => {
-        container.setScale(1);
-        onClick?.();
-    });
+    // Fire on pointerdown for a snappy, reliable click. No press-scale
+    // animation, no release tracking — touch, mouse, and fast clicks all
+    // behave the same way.
+    container.on('pointerdown', () => onClick?.());
 
     container.setLabel = (txt) => text.setText(txt);
     return container;
