@@ -7,7 +7,7 @@ src/
 └── game/
     ├── main.js                     # Phaser Game config + scene registration
     ├── data/
-    │   └── microban-levels.js      # 100 XSB level strings
+    │   └── microban-levels.js      # 155 XSB level strings (full Microban set)
     ├── core/
     │   ├── level-parser.js         # XSB text → {walls, targets, boxes, player, floors}
     │   ├── board-model.js          # Pure game state + move/undo/win logic

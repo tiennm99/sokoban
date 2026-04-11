@@ -1,11 +1,11 @@
 # Sokoban — Product Development Record
 
 ## What it is
-A from-scratch Sokoban implementation by tiennm99. Phaser 3 + Vite, deployed to GitHub Pages. The engine, UI, parser, and progression system are original code. Puzzle layouts come from David W. Skinner's freely distributable **Microban** set (100 of his puzzles shipped) — layouts only, no code reused from Skinner's own programs.
+A from-scratch Sokoban implementation by tiennm99. Phaser 3 + Vite, deployed to GitHub Pages. The engine, UI, parser, and progression system are original code. Puzzle layouts come from David W. Skinner's freely distributable **Microban** set — the full 155-puzzle set is shipped — layouts only, no code reused from Skinner's own programs.
 
 ## Goals
 - Clean, beginner-friendly Sokoban that runs in any modern browser with no install.
-- 100 curated puzzles, progressing from easy to moderately tricky.
+- Full 155-puzzle Microban set shipped, progressing from tiny beginner teasers up to the two huge finale mazes.
 - Keyboard-first UX with undo, restart, move counter, persistent progress.
 - Small, well-organized codebase (<200 LOC per file) that's easy to extend.
 
@@ -18,7 +18,7 @@ A from-scratch Sokoban implementation by tiennm99. Phaser 3 + Vite, deployed to 
 Casual puzzle fans, Sokoban beginners. Microban set chosen specifically because it's designed for beginners and illustrates one concept per puzzle.
 
 ## Success criteria
-- All 100 levels playable end-to-end.
+- All 155 levels playable end-to-end, including the oversized finale mazes that rely on responsive tile sizing.
 - Progress (completion + best moves) persists across sessions.
 - Build output fits in the default Vite budget.
 - Runs smoothly on desktop browsers at 1024×768 canvas (scaled responsively).

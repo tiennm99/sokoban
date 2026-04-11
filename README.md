@@ -5,7 +5,7 @@ My from-scratch Sokoban game, built with Phaser 3 and Vite. The engine, UI, leve
 Play: [https://tiennm99.github.io/sokoban/](https://tiennm99.github.io/sokoban/)
 
 ## Features
-- **100 solvable puzzles** using level layouts from the Microban set (beginner-friendly, concept-focused).
+- **All 155 puzzles** from the Microban set, from beginner teasers up to the giant "Take the long way home" maze and "The Dungeon" finale.
 - **Paginated level select** with progress tracking and best-move record per level.
 - **Controls**: arrow keys or WASD. `U` / `Z` to undo, `R` to restart, `Esc` for menu.
 - **Undo history**, live move counter, animated moves.

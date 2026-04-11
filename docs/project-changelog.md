@@ -1,5 +1,10 @@
 # Project Changelog
 
+## 2026-04-11 — Full Microban set
+
+### Changed
+- Level data expanded from the first 100 Microban puzzles to the complete 155-level set, including the oversized finale mazes ("Take the long way home", "The Dungeon"). Credit language updated everywhere to match.
+
 ## 2026-04-11 — Overhaul
 
 ### Added

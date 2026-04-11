@@ -6,7 +6,7 @@
 - Arrow-key movement, box pushing, target detection.
 
 ## Phase 2 — Overhaul (complete, 2026-04-11)
-- Replace 3 hand-crafted levels with 100 Microban levels.
+- Replace 3 hand-crafted levels with the full 155-puzzle Microban set.
 - Modularize: core / ui / scenes split, every file <200 LOC.
 - BoardModel with undo + move counter.
 - Paginated level select (5 pages × 20 levels).

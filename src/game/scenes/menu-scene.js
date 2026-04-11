@@ -19,7 +19,7 @@ export default class MenuScene extends Phaser.Scene {
         const cy = this.cameras.main.centerY;
 
         this.add.text(cx, cy - 200, 'SOKOBAN', FONTS.title).setOrigin(0.5);
-        this.add.text(cx, cy - 130, '100 puzzles to solve', FONTS.subtitle).setOrigin(0.5);
+        this.add.text(cx, cy - 130, '155 puzzles to solve', FONTS.subtitle).setOrigin(0.5);
 
         createButton(this, cx, cy - 20, 'PLAY', () => this.scene.start('LevelScene'), { width: 240, height: 64 });
 
