@@ -1,31 +1,40 @@
 # Sokoban
 
-A simple Sokoban game built with Phaser 3 and Vite.
+A browser-based Sokoban game built with Phaser 3 and Vite, shipping 100 Microban levels by David W. Skinner.
 
-## Description
+Play: [https://tiennm99.github.io/sokoban/](https://tiennm99.github.io/sokoban/)
 
-This is a browser-based implementation of the classic Sokoban puzzle game, built using Phaser 3 game framework and Vite as the build tool.
+## Features
+- **100 solvable puzzles** from the Microban set (beginner-friendly, concept-focused).
+- **Paginated level select** with progress tracking and best-move record per level.
+- **Controls**: arrow keys or WASD. `U` / `Z` to undo, `R` to restart, `Esc` for menu.
+- **Undo history**, live move counter, animated moves.
+- **Progress saved** locally in `localStorage`.
+- **Responsive tile sizing** so small and large levels both look right.
 
 ## Development
 
-To run the development server:
-
 ```bash
 npm install
-npm run dev
+npm run dev          # dev server on http://localhost:8080
+npm run build        # production build
+npm run dev-nolog    # dev without the analytics ping
+npm run build-nolog  # build without the analytics ping
 ```
 
-## Building
+## Project layout
+See [`docs/codebase-summary.md`](docs/codebase-summary.md).
 
-To build the project for production:
+## Documentation
+- [`docs/project-overview-pdr.md`](docs/project-overview-pdr.md) — product scope.
+- [`docs/system-architecture.md`](docs/system-architecture.md) — how the pieces fit together.
+- [`docs/code-standards.md`](docs/code-standards.md) — conventions.
+- [`docs/development-roadmap.md`](docs/development-roadmap.md) — past and planned phases.
+- [`docs/project-changelog.md`](docs/project-changelog.md) — release notes.
 
-```bash
-npm install
-npm run build
-```
+## Credits
+- Puzzles: **Microban** by David W. Skinner (April 2000). Freely distributable with credit. Original site: http://users.bentonrea.com/~sasquatch/sokoban/
+- Engine: [Phaser 3](https://phaser.io/).
 
-## Deployment
-
-This project is automatically deployed to GitHub Pages when changes are pushed to the main branch.
-
-You can access the deployed game at: [https://tiennm99.github.io/sokoban/](https://tiennm99.github.io/sokoban/)
+## License
+MIT — see `LICENSE`.

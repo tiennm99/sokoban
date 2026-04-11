@@ -1,15 +1,37 @@
-body {
+:root {
+    --bg: #1c2230;
+    --accent: #88C0D0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
     margin: 0;
     padding: 0;
-    color: rgba(255, 255, 255, 0.87);
-    background-color: #000000;
+    height: 100%;
+    color: #ECEFF4;
+    background: radial-gradient(circle at 30% 20%, #2E3440 0%, #1c2230 60%, #0f131c 100%);
+    font-family: 'Trebuchet MS', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
 }
 
 #app {
     width: 100%;
     height: 100vh;
-    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
+}
+
+#game-container {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+canvas {
+    display: block;
 }
