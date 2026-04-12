@@ -96,6 +96,7 @@
         border-radius: var(--radius);
         overflow: hidden;
         background: var(--bg-deep);
+        margin: 0 auto;
     }
 
     .floor,

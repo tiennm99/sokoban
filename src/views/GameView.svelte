@@ -196,8 +196,6 @@
     }
 
     .board-wrap {
-        display: flex;
-        justify-content: center;
         width: 100%;
         overflow: auto;
         max-height: calc(100vh - 140px);
