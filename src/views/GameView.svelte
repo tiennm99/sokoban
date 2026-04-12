@@ -37,7 +37,7 @@
     function computeTileSize() {
         if (!level) return 48;
         const maxTile = 56;
-        const minTile = 16;
+        const minTile = 10;
         const margin = 140; // header + hud + padding
         const maxByWidth = Math.floor((window.innerWidth - 80) / level.width);
         const maxByHeight = Math.floor((window.innerHeight - margin - 100) / level.height);
@@ -199,6 +199,9 @@
         display: flex;
         justify-content: center;
         width: 100%;
+        overflow: auto;
+        max-height: calc(100vh - 140px);
+        max-width: calc(100vw - 48px);
     }
 
     .error {
