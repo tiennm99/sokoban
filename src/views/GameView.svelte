@@ -5,6 +5,7 @@
 <script>
     import AppButton from './AppButton.svelte';
     import Board from './Board.svelte';
+    import DonateModal from './DonateModal.svelte';
     import { parseLevel } from '../lib/core/level-parser.js';
     import { BoardModel } from '../lib/core/board-model.js';
     import { progressStore } from '../lib/core/progress-store.js';
@@ -113,6 +114,8 @@
     }
 
     const hasNext = $derived(levelIndex + 1 < MICROBAN_LEVELS.length);
+
+    let donateOpen = $state(false);
 </script>
 
 <svelte:window onkeydown={onKey} onresize={onResize} />
@@ -161,11 +164,16 @@
                         {/if}
                         <AppButton variant="ghost" onclick={onLevels}>LEVELS</AppButton>
                     </div>
+                    <AppButton variant="ghost" size="sm" onclick={() => (donateOpen = true)} title="Support the game">
+                        ☕ BUY ME A COFFEE
+                    </AppButton>
                 </div>
             </div>
         {/if}
     {/if}
 </section>
+
+<DonateModal open={donateOpen} onClose={() => (donateOpen = false)} />
 
 <style>
     .game {
