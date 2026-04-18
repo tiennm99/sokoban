@@ -30,3 +30,45 @@
         />
     {/key}
 {/if}
+
+<footer class="site-footer">
+    Made with <span class="heart">♥</span> by
+    <a href="https://miti99.com" target="_blank" rel="noopener noreferrer">miti99</a>
+</footer>
+
+<style>
+    .site-footer {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 6px;
+        text-align: center;
+        font-size: 12px;
+        color: var(--text-dim);
+        letter-spacing: 0.5px;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .site-footer a {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 700;
+        pointer-events: auto;
+    }
+
+    .site-footer a:hover {
+        text-decoration: underline;
+    }
+
+    .heart {
+        color: var(--danger);
+        display: inline-block;
+        animation: pulse 1.6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50%      { transform: scale(1.2); }
+    }
+</style>

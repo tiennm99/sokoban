@@ -3,6 +3,7 @@
 -->
 <script>
     import AppButton from './AppButton.svelte';
+    import DonateModal from './DonateModal.svelte';
     import { progressStore } from '../lib/core/progress-store.js';
     import { MICROBAN_LEVELS } from '../lib/data/microban-levels.js';
 
@@ -10,6 +11,8 @@
 
     const total = MICROBAN_LEVELS.length;
     const completed = progressStore.getCompletedCount();
+
+    let donateOpen = $state(false);
 </script>
 
 <section class="screen menu">
@@ -26,8 +29,14 @@
         <div>Push every box onto a target tile.</div>
     </div>
 
+    <AppButton variant="ghost" size="sm" onclick={() => (donateOpen = true)} title="Support the game">
+        ♥ DONATE
+    </AppButton>
+
     <p class="credit">Level layouts from Microban by David W. Skinner</p>
 </section>
+
+<DonateModal open={donateOpen} onClose={() => (donateOpen = false)} />
 
 <style>
     .menu {
