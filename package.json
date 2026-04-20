@@ -16,6 +16,7 @@
   "homepage": "https://tiennm99.github.io/sokoban/",
   "scripts": {
       "dev": "vite --config vite/config.dev.mjs",
+      "dev:codeserver": "vite --config vite/config.codeserver.mjs",
       "build": "vite build --config vite/config.prod.mjs"
   },
   "devDependencies": {
