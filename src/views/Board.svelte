@@ -97,6 +97,11 @@
         overflow: hidden;
         background: var(--bg-deep);
         margin: 0 auto;
+        /* `manipulation` kills the 300ms double-tap-zoom delay but still lets
+           the parent `.board-wrap` pan-scroll for the giant finale levels. */
+        touch-action: manipulation;
+        user-select: none;
+        -webkit-user-select: none;
     }
 
     .floor,

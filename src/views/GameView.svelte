@@ -6,9 +6,11 @@
     import AppButton from './AppButton.svelte';
     import Board from './Board.svelte';
     import DonateModal from './DonateModal.svelte';
+    import MobileControls from './MobileControls.svelte';
     import { parseLevel } from '../lib/core/level-parser.js';
     import { BoardModel } from '../lib/core/board-model.js';
     import { progressStore } from '../lib/core/progress-store.js';
+    import { pulse } from '../lib/core/haptics.js';
     import { MICROBAN_LEVELS } from '../lib/data/microban-levels.js';
 
     let { levelIndex, onMenu, onLevels, onNext } = $props();
@@ -38,8 +40,10 @@
     function computeTileSize() {
         if (!level) return 48;
         const maxTile = 56;
-        const minTile = 10;
-        const margin = 140; // header + hud + padding
+        const minTile = 16;
+        // On touch devices reserve room for the bottom D-pad + action stack.
+        const isCoarse = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
+        const margin = isCoarse ? 260 : 140; // header + hud (+ mobile controls) + padding
         const maxByWidth = Math.floor((window.innerWidth - 80) / level.width);
         const maxByHeight = Math.floor((window.innerHeight - margin - 100) / level.height);
         return Math.max(minTile, Math.min(maxTile, maxByWidth, maxByHeight));
@@ -63,12 +67,17 @@
         if (model.isSolved() && !won) {
             won = true;
             progressStore.recordCompletion(levelIndex, moves);
+            pulse(60);
         }
     }
 
     function tryMove(dx, dy) {
         if (won || !model) return;
-        if (model.tryMove(dx, dy)) syncFromModel();
+        if (model.tryMove(dx, dy)) {
+            // Short buzz when a move pushed a box; plain steps stay silent.
+            if (model.history.at(-1)?.movedBox) pulse(10);
+            syncFromModel();
+        }
     }
 
     function undo() {
@@ -113,6 +122,16 @@
         tileSize = computeTileSize();
     }
 
+    // Recompute tile size when pointer type changes (e.g. external keyboard
+    // attached/detached on iPad), so the bottom-controls reservation matches.
+    $effect(() => {
+        if (typeof window === 'undefined') return;
+        const mq = window.matchMedia('(pointer: coarse)');
+        const handler = () => onResize();
+        mq.addEventListener('change', handler);
+        return () => mq.removeEventListener('change', handler);
+    });
+
     const hasNext = $derived(levelIndex + 1 < MICROBAN_LEVELS.length);
 
     let donateOpen = $state(false);
@@ -133,7 +152,7 @@
                     {#if best != null} &nbsp;·&nbsp; Best: <strong>{best}</strong>{/if}
                 </div>
             </div>
-            <div class="hud-right">
+            <div class="hud-right desktop-actions">
                 <AppButton variant="ghost" size="sm" onclick={undo} title="Undo (U / Z)">UNDO</AppButton>
                 <AppButton variant="ghost" size="sm" onclick={restart} title="Restart (R)">RESTART</AppButton>
                 <AppButton variant="ghost" size="sm" onclick={onLevels} title="Back to levels (Esc)">LEVELS</AppButton>
@@ -152,6 +171,13 @@
                 {tileSize}
             />
         </div>
+
+        <MobileControls
+            onMove={tryMove}
+            onUndo={undo}
+            onRestart={restart}
+            {onLevels}
+        />
 
         {#if won}
             <div class="overlay">
@@ -208,6 +234,13 @@
         overflow: auto;
         max-height: calc(100vh - 140px);
         max-width: calc(100vw - 48px);
+    }
+
+    /* On touch devices, hide the duplicated header action buttons (UNDO /
+       RESTART / LEVELS) and reserve room for the bottom MobileControls. */
+    @media (pointer: coarse) {
+        .desktop-actions { display: none; }
+        .board-wrap { max-height: calc(100vh - 260px); }
     }
 
     .error {

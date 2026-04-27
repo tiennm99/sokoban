@@ -47,6 +47,15 @@ html, body {
     color: var(--text);
     font-family: var(--font);
     -webkit-font-smoothing: antialiased;
+    /* Mobile: kill pull-to-refresh, long-press selection, callout, tap flash. */
+    overscroll-behavior: contain;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
 }
 
 #app {
