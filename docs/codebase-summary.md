@@ -25,7 +25,7 @@ src/
 public/
 ├── style.css                       # Legacy file — theme now lives in src/app.css
 ├── favicon.png
-└── assets/                         # bg.png, logo.png (unused, reserved)
+└── assets/                         # qr.jpg (donate VietQR)
 ```
 
 ## Data flow
