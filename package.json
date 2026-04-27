@@ -4,24 +4,25 @@
   "version": "1.0.0",
   "type": "module",
   "repository": {
-      "type": "git",
-      "url": "git+https://github.com/tiennm99/sokoban.git"
+    "type": "git",
+    "url": "git+https://github.com/tiennm99/sokoban.git"
   },
   "author": "tiennm99",
   "license": "Apache-2.0",
   "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
   "bugs": {
-      "url": "https://github.com/tiennm99/sokoban/issues"
+    "url": "https://github.com/tiennm99/sokoban/issues"
   },
   "homepage": "https://tiennm99.github.io/sokoban/",
   "scripts": {
-      "dev": "vite --config vite/config.dev.mjs",
-      "dev:codeserver": "vite --config vite/config.codeserver.mjs",
-      "build": "vite build --config vite/config.prod.mjs"
+    "dev": "vite --config vite/config.dev.mjs",
+    "dev:codeserver": "vite --config vite/config.codeserver.mjs",
+    "build": "vite build --config vite/config.prod.mjs"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
     "svelte": "^5.19.0",
-    "vite": "^6.4.2"
+    "vite": "^6.4.2",
+    "vite-plugin-pwa": "^1.2.0"
   }
 }
