@@ -1,6 +1,6 @@
 {
   "name": "sokoban",
-  "description": "A simple Sokoban game built with Phaser 3 and Vite",
+  "description": "A simple Sokoban game built with Svelte 5 and Vite",
   "version": "1.0.0",
   "type": "module",
   "repository": {

@@ -1,7 +1,7 @@
 # Sokoban Overhaul
 
 **Date:** 2026-04-11
-**Status:** In Progress
+**Status:** Completed (work shipped; see git log for details)
 
 ## Goal
 - Replace 3 hand-crafted levels with 100 solvable Microban levels (David W. Skinner, public, freely distributable).

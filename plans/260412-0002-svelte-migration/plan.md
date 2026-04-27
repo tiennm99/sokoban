@@ -1,7 +1,7 @@
 # Svelte Migration
 
 **Date:** 2026-04-12
-**Status:** In progress
+**Status:** Completed (work shipped — see commit 8a3d4b4 `feat!: rewrite on Svelte 5, drop Phaser`)
 
 ## Goal
 Replace Phaser 3 with Svelte 5 as the rendering/UI layer. Keep framework-agnostic modules untouched. Ship a smaller, more structured, natively-clickable version of the same game.

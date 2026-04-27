@@ -11,7 +11,7 @@ Play: [https://tiennm99.github.io/sokoban/](https://tiennm99.github.io/sokoban/)
 - **Mobile-optimized**: Touch-safe controls, haptic feedback (vibrate on push & win), safe-area insets for notches/nav bars, browser gesture blocking.
 - **Installable PWA**: Add to home screen on iOS/Android, play offline, standalone fullscreen mode.
 - **Undo history**, live move counter, animated moves.
-- **Progress saved** locally in `localStorage`, syncs across all devices you use.
+- **Progress saved** locally in `localStorage` (per browser, per device).
 - **Responsive tile sizing** so small and large levels both look right on any screen.
 
 ## Development
