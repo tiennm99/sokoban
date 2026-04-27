@@ -97,6 +97,9 @@
     let lastKeyAt = 0;
 
     function onKey(e) {
+        // Don't route gameplay keys while the donate modal is open — its own
+        // Escape handler should be the only consumer.
+        if (donateOpen) return;
         if (e.key === 'Escape') { onLevels(); return; }
         if (e.key === 'r' || e.key === 'R') { restart(); return; }
         if (e.key === 'u' || e.key === 'U' || e.key === 'z' || e.key === 'Z') { undo(); return; }
@@ -181,8 +184,8 @@
 
         {#if won}
             <div class="overlay">
-                <div class="dialog">
-                    <h2>LEVEL COMPLETE!</h2>
+                <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="win-title" tabindex="-1">
+                    <h2 id="win-title">LEVEL COMPLETE!</h2>
                     <p class="final">Moves: <strong>{moves}</strong></p>
                     <div class="dialog-actions">
                         {#if hasNext}

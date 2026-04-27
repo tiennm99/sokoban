@@ -26,7 +26,8 @@ export default defineConfig({
                 ]
             },
             workbox: {
-                globPatterns: ['**/*.{js,css,html,png,svg,webmanifest}']
+                // jpg is needed so the donation QR image works offline.
+                globPatterns: ['**/*.{js,css,html,png,jpg,svg,webmanifest}']
             }
         })
     ]

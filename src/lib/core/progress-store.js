@@ -46,6 +46,14 @@ export const progressStore = {
         return Object.keys(readRaw().completed).length;
     },
 
+    /**
+     * Returns the full progress snapshot. Lets callers read many levels
+     * without paying for one parse + one localStorage read per query.
+     */
+    snapshot() {
+        return readRaw();
+    },
+
     reset() {
         writeRaw({ completed: {}, bestMoves: {} });
     }

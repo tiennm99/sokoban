@@ -18,14 +18,16 @@
     let completedCount = $state(progressStore.getCompletedCount());
 
     let visibleLevels = $derived.by(() => {
+        // Read storage once per page render instead of 2× per visible level.
+        const { completed, bestMoves } = progressStore.snapshot();
         const start = page * PER_PAGE;
         const end = Math.min(start + PER_PAGE, total);
         const out = [];
         for (let i = start; i < end; i++) {
             out.push({
                 index: i,
-                done: progressStore.isCompleted(i),
-                best: progressStore.getBestMoves(i)
+                done: !!completed[i],
+                best: bestMoves[i] ?? null
             });
         }
         return out;
