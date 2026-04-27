@@ -68,6 +68,36 @@ body {
 
 button {
     font-family: inherit;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Shared modal scaffolding. Specific dialogs add their own padding/sizing. */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(12, 16, 24, 0.72);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 16px;
+    animation: dialog-fade-in 180ms ease;
+}
+
+.dialog {
+    background: var(--panel);
+    border: 2px solid var(--accent);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+}
+
+@keyframes dialog-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 h1, h2, h3, p {

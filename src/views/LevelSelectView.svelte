@@ -15,7 +15,9 @@
 
     let page = $state(0);
 
-    let completedCount = $state(progressStore.getCompletedCount());
+    // Snapshot once on entry; doesn't reactively refresh, but the user
+    // navigates away from this screen to play, so this is fine.
+    const completedCount = progressStore.getCompletedCount();
 
     let visibleLevels = $derived.by(() => {
         // Read storage once per page render instead of 2× per visible level.

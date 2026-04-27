@@ -64,10 +64,9 @@ export class BoardModel {
         return true;
     }
 
-    /** True when every box sits on a target. */
+    /** True when every box sits on a target. (Empty box-set is never "solved".) */
     isSolved() {
-        if (this.boxes.length === 0) return false;
-        return this.boxes.every(b => this.isTarget(b.x, b.y));
+        return this.boxes.length > 0 && this.boxes.every(b => this.isTarget(b.x, b.y));
     }
 
     get moveCount() {

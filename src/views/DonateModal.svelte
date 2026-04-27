@@ -7,6 +7,22 @@
 
     let { open = false, onClose } = $props();
 
+    let dialogEl = $state();
+    let prevFocus = null;
+
+    // On open: stash the previously-focused element and move focus into the
+    // dialog so screen readers announce it and Tab cycles within. On close:
+    // restore the prior focus so keyboard users land back where they were.
+    $effect(() => {
+        if (open) {
+            prevFocus = document.activeElement;
+            queueMicrotask(() => dialogEl?.focus());
+        } else if (prevFocus instanceof HTMLElement) {
+            prevFocus.focus();
+            prevFocus = null;
+        }
+    });
+
     function onKey(e) {
         if (open && e.key === 'Escape') onClose();
     }
@@ -23,7 +39,14 @@
 
 {#if open}
     <div class="overlay" onclick={onBackdropClick} role="presentation">
-        <div class="dialog" role="dialog" aria-modal="true" aria-label="Donate" tabindex="-1">
+        <div
+            class="dialog"
+            bind:this={dialogEl}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Donate"
+            tabindex="-1"
+        >
             <h2>Thanks for playing!</h2>
             <p class="sub">Scan to send a tip — supports 50+ banking apps.</p>
             <img
@@ -37,31 +60,17 @@
 {/if}
 
 <style>
+    /* .overlay + .dialog base lives in app.css; only specific tweaks here. */
     .overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(12, 16, 24, 0.72);
-        display: flex;
-        align-items: center;
-        justify-content: center;
         z-index: 200;
-        animation: fade-in 180ms ease;
-        padding: 16px;
     }
 
     .dialog {
-        background: var(--panel);
-        border: 2px solid var(--accent);
-        border-radius: var(--radius-lg);
         padding: 24px 28px 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
         gap: 12px;
         max-width: 380px;
         max-height: 90vh;
         overflow: auto;
-        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
     }
 
     .dialog h2 {
@@ -82,10 +91,5 @@
         height: auto;
         border-radius: var(--radius);
         display: block;
-    }
-
-    @keyframes fade-in {
-        from { opacity: 0; }
-        to { opacity: 1; }
     }
 </style>

@@ -15,6 +15,10 @@
         tileSize = 48
     } = $props();
 
+    // 8-neighborhood for the wall-trim pass below. Hoisted out of $derived
+    // so it isn't reallocated on every reactive recomputation.
+    const DIRS = [[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[1,1],[-1,1],[1,-1]];
+
     function keyToXY(k) {
         const [x, y] = k.split(',').map(Number);
         return { x, y };
@@ -38,7 +42,6 @@
 
     // Only render walls that touch a floor tile — skips the unused outer border.
     let wallCells = $derived.by(() => {
-        const DIRS = [[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[1,1],[-1,1],[1,-1]];
         const out = [];
         for (const k of walls) {
             const { x, y } = keyToXY(k);

@@ -251,27 +251,10 @@
         font-weight: 700;
     }
 
-    .overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(12, 16, 24, 0.72);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 100;
-        animation: fade-in 180ms ease;
-    }
-
+    /* .overlay + .dialog base lives in app.css; only specific tweaks here. */
     .dialog {
-        background: var(--panel);
-        border: 2px solid var(--accent);
-        border-radius: var(--radius-lg);
         padding: 32px 40px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
         gap: 16px;
-        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
     }
 
     .dialog h2 {
@@ -291,8 +274,4 @@
         margin-top: 8px;
     }
 
-    @keyframes fade-in {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
 </style>

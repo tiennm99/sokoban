@@ -15,7 +15,7 @@ const BOX_ON_TARGET = '*';
 const PLAYER = '@';
 const PLAYER_ON_TARGET = '+';
 
-const key = (x, y) => `${x},${y}`;
+export const cellKey = (x, y) => `${x},${y}`;
 
 function parseGrid(xsb) {
     const lines = xsb.split('\n').filter(l => l.length > 0 && !l.startsWith(';'));
@@ -35,24 +35,24 @@ function extractEntities(lines, width, height) {
             const ch = row[x] || ' ';
             switch (ch) {
                 case WALL:
-                    walls.add(key(x, y));
+                    walls.add(cellKey(x, y));
                     break;
                 case TARGET:
-                    targets.add(key(x, y));
+                    targets.add(cellKey(x, y));
                     break;
                 case BOX:
                     boxes.push({ x, y });
                     break;
                 case BOX_ON_TARGET:
                     boxes.push({ x, y });
-                    targets.add(key(x, y));
+                    targets.add(cellKey(x, y));
                     break;
                 case PLAYER:
                     player = { x, y };
                     break;
                 case PLAYER_ON_TARGET:
                     player = { x, y };
-                    targets.add(key(x, y));
+                    targets.add(cellKey(x, y));
                     break;
             }
         }
@@ -68,7 +68,7 @@ function floodFillFloors(player, walls, width, height) {
     while (stack.length) {
         const { x, y } = stack.pop();
         if (x < 0 || y < 0 || x >= width || y >= height) continue;
-        const k = key(x, y);
+        const k = cellKey(x, y);
         if (floors.has(k) || walls.has(k)) continue;
         floors.add(k);
         stack.push({ x: x + 1, y });
@@ -85,5 +85,3 @@ export function parseLevel(xsb) {
     const floors = floodFillFloors(player, walls, width, height);
     return { width, height, walls, targets, boxes, player, floors };
 }
-
-export { key as cellKey };

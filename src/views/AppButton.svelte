@@ -42,8 +42,6 @@
         transition: background 120ms ease, transform 80ms ease, box-shadow 120ms ease;
         user-select: none;
         -webkit-user-select: none;
-        touch-action: manipulation;
-        -webkit-tap-highlight-color: transparent;
     }
 
     .btn:hover:not(:disabled) {
