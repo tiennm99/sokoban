@@ -22,14 +22,20 @@
 - Drop dead Arcade physics and broken shutdown code.
 - Docs folder + README refresh.
 
-## Phase 3 — Polish (planned)
+## Phase 3 — Mobile Comfort & PWA (complete, 2026-04-27)
+- On-screen D-pad + thumb-zone action stack (hidden on desktop, visible on touch).
+- Browser gesture blocking (pull-to-refresh, double-tap zoom, long-press select).
+- Safe-area insets for notches and nav bars.
+- Haptics module (vibrate on box push + win).
+- PWA full offline support with Workbox service worker and installable Web Manifest.
+
+## Phase 4 — Polish (planned)
 - Sound effects (step, push, win).
 - Player facing direction indicator.
 - Level category tabs (Easy / Medium / Hard) derived from puzzle size or move count.
-- Touch controls (swipe) for mobile.
 - Unit tests for `level-parser` and `board-model`.
 
-## Phase 4 — Stretch (ideas)
+## Phase 5 — Stretch (ideas)
 - Additional level packs (Sasquatch, Sokogen).
 - Custom level importer (paste XSB text).
 - Replay / move playback.

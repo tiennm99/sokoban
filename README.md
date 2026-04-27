@@ -7,10 +7,12 @@ Play: [https://tiennm99.github.io/sokoban/](https://tiennm99.github.io/sokoban/)
 ## Features
 - **All 155 puzzles** from the Microban set, from beginner teasers up to the giant "Take the long way home" maze and "The Dungeon" finale.
 - **Paginated level select** with progress tracking and best-move record per level.
-- **Controls**: arrow keys or WASD. `U` / `Z` to undo, `R` to restart, `Esc` for menu.
+- **Controls**: Arrow keys or WASD on desktop; on-screen D-pad on mobile (bottom-right, one-handed). `U` / `Z` to undo, `R` to restart, `Esc` for menu.
+- **Mobile-optimized**: Touch-safe controls, haptic feedback (vibrate on push & win), safe-area insets for notches/nav bars, browser gesture blocking.
+- **Installable PWA**: Add to home screen on iOS/Android, play offline, standalone fullscreen mode.
 - **Undo history**, live move counter, animated moves.
-- **Progress saved** locally in `localStorage`.
-- **Responsive tile sizing** so small and large levels both look right.
+- **Progress saved** locally in `localStorage`, syncs across all devices you use.
+- **Responsive tile sizing** so small and large levels both look right on any screen.
 
 ## Development
 

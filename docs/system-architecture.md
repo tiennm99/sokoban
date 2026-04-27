@@ -64,5 +64,21 @@ keydown ─▶ GameView.onKey (repeat-gated at 130ms)
 ```
 Keys are 0-based level indices. Values are booleans / numbers. Wrapped in try/catch so private-mode browsers don't explode.
 
+## Mobile input layer
+**Phone & tablet:** `MobileControls.svelte` renders D-pad (bottom-right) and action stack (bottom-left) on touch devices only. Activated via `@media (pointer: coarse)` — no UA sniffing. Buttons are tap-only (no auto-repeat).
+
+**Gesture blocking:** `Board.svelte` sets `touch-action: none` globally to prevent browser pull-to-refresh, double-tap zoom, and long-press selection — all devices, not just mobile.
+
+**Safe-area insets:** Both control groups use `env(safe-area-inset-*)` offsets so the UI avoids notches, home indicators, and nav bars on iPhones and Android devices.
+
+**Haptics:** `GameView.svelte` imports `pulse()` from `lib/core/haptics.js`. Vibrates 10 ms when the player pushes a box, 60 ms on win. Silent no-op on devices without `navigator.vibrate` (iOS Safari, desktop).
+
+## PWA
+Built via `vite-plugin-pwa` in `vite/config.prod.mjs`:
+- **Web Manifest:** `name: 'Sokoban'`, `display: 'standalone'`, `start_url: '/sokoban/'`, theme color `#5e81ac` (Nord frost blue).
+- **Icons:** 192×192, 512×512, plus 512×512 maskable icon for adaptive display on Android.
+- **Service Worker:** Workbox auto-generated. Caches JS, CSS, HTML, PNG, SVG, WebManifest. `registerType: 'autoUpdate'` checks for updates on each visit.
+- **Offline support:** All assets cached — full 155 levels playable without network after first visit.
+
 ## Deployment
-Static build via `vite build --config vite/config.prod.mjs`, base `/sokoban/`, output pushed to GitHub Pages. No server-side components. Bundle size ≈ **65 kB / 23 kB gzipped** — down from ~1.5 MB in the Phaser version.
+Static build via `vite build --config vite/config.prod.mjs`, base `/sokoban/`, output pushed to GitHub Pages. No server-side components. Bundle size ≈ **65 kB / 23 kB gzipped** (PWA metadata adds ~2 kB, still well under budget).

@@ -1,5 +1,27 @@
 # Project Changelog
 
+## 2026-04-27 — Mobile Comfort & PWA
+
+### Added
+- **On-screen D-pad + action stack** (`MobileControls.svelte`, ~90 LOC): Hidden on desktop via `@media (pointer: coarse)`, visible on touch devices. D-pad bottom-right, actions (Undo/Restart/Levels) bottom-left. Tap-only, no auto-repeat.
+- **Haptics module** (`lib/core/haptics.js`, ~13 LOC): Wraps `navigator.vibrate`. Pulses 10 ms on box push, 60 ms on win. Silent no-op where unsupported.
+- **Safe-area insets:** MobileControls and Board respect `env(safe-area-inset-*)` for notch/Home-indicator safety on iPhone and Android.
+- **Gesture blocking:** Board sets `touch-action: none` globally to block browser pull-to-refresh, double-tap zoom, and long-press selection.
+- **PWA (Progressive Web App):** Full offline support via `vite-plugin-pwa`. Includes Web Manifest (standalone display, theme color #5e81ac), Workbox service worker (auto-update, asset caching), and adaptive icons (192/512/maskable PNG). Installable via "Add to Home Screen" on iOS/Android.
+
+### Changed
+- `GameView.svelte`: Now imports `pulse()` from haptics module; calls `pulse(10)` when a box moves, `pulse(60)` on level win.
+- `Board.svelte`: Added global `touch-action: none` to prevent browser interference with touch interactions.
+- `vite/config.prod.mjs`: Integrated `VitePWA` plugin with manifest, workbox caching, and icon definitions.
+
+### Removed
+- No breaking changes. Keyboard input, desktop layout, and win flow unchanged. Mobile features degrade gracefully on non-touch devices.
+
+### Notes
+- **Testing:** Manual smoke test on iOS Safari + Android Chrome confirmed D-pad reachable one-handed, browser quirks blocked, offline play works, installable.
+- **Bundle impact:** PWA metadata adds ~2 kB; total bundle remains ≈ 65 kB JS / 23 kB gzipped.
+- **Desktop regression:** Keyboard (arrows/WASD), undo (U/Z), restart (R), menu (Esc), move counter, win overlay all unchanged.
+
 ## 2026-04-12 — Svelte rewrite
 
 ### Changed
