@@ -164,25 +164,29 @@
             </div>
         </header>
 
-        <div class="board-wrap">
-            <Board
-                width={level.width}
-                height={level.height}
-                walls={level.walls}
-                targets={level.targets}
-                floors={level.floors}
-                {player}
-                {boxes}
-                {tileSize}
-            />
-        </div>
+        <div class="play-stack">
+            <div class="play-group">
+                <div class="board-wrap">
+                    <Board
+                        width={level.width}
+                        height={level.height}
+                        walls={level.walls}
+                        targets={level.targets}
+                        floors={level.floors}
+                        {player}
+                        {boxes}
+                        {tileSize}
+                    />
+                </div>
 
-        <MobileControls
-            onMove={tryMove}
-            onUndo={undo}
-            onRestart={restart}
-            {onLevels}
-        />
+                <MobileControls
+                    onMove={tryMove}
+                    onUndo={undo}
+                    onRestart={restart}
+                    {onLevels}
+                />
+            </div>
+        </div>
 
         {#if won}
             <div class="overlay">
@@ -239,6 +243,25 @@
         color: var(--text-muted);
     }
 
+    /* Desktop: .play-stack is a passthrough that lets .board-wrap flex-grow
+       inside it, matching the previous behavior where the board occupied the
+       remaining column space. */
+    .play-stack {
+        flex: 1 1 auto;
+        width: 100%;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .play-group {
+        flex: 1 1 auto;
+        min-height: 0;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
     .board-wrap {
         flex: 1 1 auto;
         width: 100%;
@@ -248,20 +271,30 @@
     }
 
     /* On touch devices: hide duplicated header action buttons (MobileControls
-       owns its own row at the bottom), tighten the column rhythm, and anchor
-       the puzzle to the bottom of .board-wrap so dead space accumulates above
-       the board (hidden behind HUD) instead of below it (between board and
-       dock). Closes the perceived "D-pad too far" gap on short puzzles. */
+       owns its own row at the bottom), tighten the column rhythm, and center
+       the [board + 8px gap + dock] group inside the remaining viewport space.
+       `safe center` falls through to start-aligned when the group overflows so
+       tall finale puzzles don't get clipped above the HUD. */
     @media (pointer: coarse) {
         .desktop-actions { display: none; }
 
         .game { gap: 10px; }
 
+        .play-stack {
+            justify-content: safe center;
+        }
+
+        .play-group {
+            flex: 0 1 auto;
+            gap: 8px;
+            max-height: 100%;
+        }
+
         .board-wrap {
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
+            flex: 1 1 auto;
             max-width: calc(100vw - 24px);
+            display: flex;
+            justify-content: center;
         }
     }
 

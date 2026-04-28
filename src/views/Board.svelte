@@ -107,14 +107,6 @@
         -webkit-user-select: none;
     }
 
-    /* On touch devices the parent .board-wrap is a flex container with
-       align-items: flex-end. Adding margin-top: auto is a belt-and-suspenders
-       cross-axis push so the board hugs the dock even if a future refactor
-       drops the parent's align-items. No effect on desktop (parent is not flex). */
-    @media (pointer: coarse) {
-        .board { margin-top: auto; }
-    }
-
     .floor,
     .target,
     .wall,
