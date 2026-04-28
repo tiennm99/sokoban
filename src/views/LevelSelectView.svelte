@@ -171,6 +171,10 @@
         display: flex;
         align-items: center;
         gap: 16px;
+        /* Clear the fixed site-footer (~28px tall + 6px from bottom + safe
+           area). Otherwise the pager sits on top of the "made by miti99"
+           link on shorter viewports. */
+        margin-bottom: calc(48px + env(safe-area-inset-bottom));
     }
 
     .page-label {
