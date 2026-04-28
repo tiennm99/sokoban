@@ -72,6 +72,12 @@ body {
     #app { padding: 12px 12px 0; }
 }
 
+/* Landscape phones get even tighter top padding so the board has more
+   vertical room (every px counts when the viewport is only ~360-412 tall). */
+@media (pointer: coarse) and (orientation: landscape) {
+    #app { padding: 6px 12px 0; }
+}
+
 button {
     font-family: inherit;
     touch-action: manipulation;

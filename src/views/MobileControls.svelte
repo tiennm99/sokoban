@@ -158,15 +158,16 @@
         .action { height: 48px; }
     }
 
-    /* Landscape phones: dock becomes a narrow right column. Action stack
-       sits at the top, d-pad at the bottom so the arrows land in the
-       natural thumb arc for a two-handed grip. */
+    /* Landscape phones: dock becomes a narrow right column anchored to the
+       bottom (thumb arc for two-handed grip). Smaller arrows (44 vs 48 in
+       portrait) shrink the dock from 160 -> 150 wide and 102 -> 94 tall, so
+       the board can claim more horizontal real estate. */
     @media (pointer: coarse) and (orientation: landscape) {
         .mobile-dock {
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: flex-end;
             align-items: center;
-            width: 160px;
+            width: 150px;
             gap: 12px;
             padding:
                 12px
@@ -175,10 +176,21 @@
                 8px;
         }
 
-        /* Override portrait's align-self: flex-start; in column layout the
-           cross axis is horizontal and we want the d-pad centered. */
-        .dpad { align-self: center; }
-        .dock-left { align-self: center; }
+        /* Override portrait's align-self: flex-start; column layout's cross
+           axis is horizontal — center both stacks. */
+        .dpad {
+            align-self: center;
+            grid-template-columns: 44px 44px 44px;
+            grid-template-rows: 44px 44px;
+            gap: 6px;
+        }
+
+        .dock-left {
+            align-self: center;
+            grid-auto-rows: 44px;
+        }
+
+        .action { height: 44px; }
     }
 
     /* Global `button` rules (touch-action, tap-highlight) live in app.css. */

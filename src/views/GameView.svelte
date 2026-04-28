@@ -52,8 +52,11 @@
         //   desktop           : HUD only.
         let chromeY, chromeX;
         if (isCoarse && isLandscape) {
-            chromeY = 76;
-            chromeX = 80 + 160; // base + side dock width
+            // Landscape side-by-side: tighter app padding (6 top), tighter
+            // .game gap (6), HUD ~52 → 64 vertical chrome. Dock column 150px
+            // + 12 gap + 24 lateral = 186 horizontal chrome.
+            chromeY = 64;
+            chromeX = 24 + 150 + 12;
         } else if (isCoarse) {
             chromeY = 295;
             chromeX = 80;
@@ -326,10 +329,11 @@
 
     /* Landscape phones: flip .play-group to a row so the dock occupies a
        narrow right column instead of stacking below the board. Lets the board
-       claim the full vertical viewport (minus HUD), 3x the tile size on most
-       Microban levels. Drop the portrait upward-bias padding — the row layout
-       fills space differently. */
+       claim the full vertical viewport (minus HUD), ~3x the tile size on most
+       Microban levels. Tighter .game gap and #app top padding (see app.css)
+       claw back ~10 more vertical px for the board. */
     @media (pointer: coarse) and (orientation: landscape) {
+        .game { gap: 6px; }
         .play-stack { padding-bottom: 0; }
 
         .play-group {
