@@ -31,17 +31,19 @@
     {/key}
 {/if}
 
-<footer class="site-footer">
-    Made with <span class="heart">♥</span> by
-    <a href="https://miti99.com" target="_blank" rel="noopener noreferrer">miti99</a>
-</footer>
+{#if view !== 'game'}
+    <footer class="site-footer">
+        Made with <span class="heart">♥</span> by
+        <a href="https://miti99.com" target="_blank" rel="noopener noreferrer">miti99</a>
+    </footer>
+{/if}
 
 <style>
     .site-footer {
         position: fixed;
         left: 0;
         right: 0;
-        bottom: 6px;
+        bottom: calc(6px + env(safe-area-inset-bottom));
         text-align: center;
         font-size: 12px;
         color: var(--text-dim);

@@ -41,9 +41,9 @@
         if (!level) return 48;
         const maxTile = 56;
         const minTile = 16;
-        // On touch devices reserve room for the bottom D-pad + action stack.
+        // Dock is now in-flow (flex row at bottom); margin only covers header + hud + padding.
         const isCoarse = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
-        const margin = isCoarse ? 260 : 140; // header + hud (+ mobile controls) + padding
+        const margin = isCoarse ? 220 : 120; // header + hud (+ in-flow mobile dock) + padding
         const maxByWidth = Math.floor((window.innerWidth - 80) / level.width);
         const maxByHeight = Math.floor((window.innerHeight - margin - 100) / level.height);
         return Math.max(minTile, Math.min(maxTile, maxByWidth, maxByHeight));
@@ -206,6 +206,11 @@
 
 <style>
     .game {
+        /* Stretch to #app's inner area (min-height: 100vh minus padding) so
+           .board-wrap can flex-grow without forcing page-scroll. */
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
         gap: 16px;
     }
 
@@ -233,17 +238,17 @@
     }
 
     .board-wrap {
+        flex: 1 1 auto;
         width: 100%;
         overflow: auto;
-        max-height: calc(100vh - 140px);
+        min-height: 0;
         max-width: calc(100vw - 48px);
     }
 
-    /* On touch devices, hide the duplicated header action buttons (UNDO /
-       RESTART / LEVELS) and reserve room for the bottom MobileControls. */
+    /* On touch devices, hide the duplicated header action buttons —
+       MobileControls now occupies its own row at the bottom of the flex column. */
     @media (pointer: coarse) {
         .desktop-actions { display: none; }
-        .board-wrap { max-height: calc(100vh - 260px); }
     }
 
     .error {

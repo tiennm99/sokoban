@@ -1,47 +1,134 @@
 <!--
     Touch-only on-screen controls. Hidden on desktop via @media (pointer: coarse).
-    Bottom-left action stack (UNDO / RESTART / LEVELS), bottom-right D-pad.
-    Tap-only — no auto-repeat. Calls back into GameView with plain handlers.
+    In-flow bottom row: action stack on the left (UNDO / RESET / LVLS), D-pad on the right.
+    RESET is two-tap armed (mobile only) to prevent destructive mis-taps.
+    Arrow buttons fire on pointerdown and auto-repeat at 130ms while held.
 -->
 <script>
+    const REPEAT_MS = 130;
+    const ARM_MS = 2000;
+
     let { onMove, onUndo, onRestart, onLevels } = $props();
+
+    // Press-and-hold repeat shared across all four arrows. Last-press wins.
+    let holdTimer = null;
+
+    function startHold(dx, dy) {
+        onMove(dx, dy);
+        clearInterval(holdTimer);
+        holdTimer = setInterval(() => onMove(dx, dy), REPEAT_MS);
+    }
+    function endHold() {
+        clearInterval(holdTimer);
+        holdTimer = null;
+    }
+
+    // RESET arming: first tap arms (visual delta), second tap within ARM_MS resets.
+    let resetArmed = $state(false);
+    let armTimer = null;
+
+    function disarm() {
+        resetArmed = false;
+        armTimer = null;
+    }
+
+    function handleReset() {
+        if (resetArmed) {
+            clearTimeout(armTimer);
+            disarm();
+            onRestart();
+            return;
+        }
+        resetArmed = true;
+        clearTimeout(armTimer);
+        armTimer = setTimeout(disarm, ARM_MS);
+    }
+
+    // Defensive cleanup on unmount.
+    $effect(() => () => {
+        clearInterval(holdTimer);
+        clearTimeout(armTimer);
+    });
 </script>
 
-<div class="dock-left">
-    <button class="action" type="button" onclick={onUndo} aria-label="Undo">UNDO</button>
-    <button class="action" type="button" onclick={onRestart} aria-label="Restart">RESET</button>
-    <button class="action" type="button" onclick={onLevels} aria-label="Levels">LVLS</button>
-</div>
+<div class="mobile-dock">
+    <div class="dock-left">
+        <button class="action" type="button" onclick={onUndo} aria-label="Undo">UNDO</button>
+        <button
+            class="action"
+            class:armed={resetArmed}
+            type="button"
+            onclick={handleReset}
+            aria-label={resetArmed ? 'Tap again to confirm reset' : 'Reset'}>
+            {resetArmed ? 'TAP AGAIN' : 'RESET'}
+        </button>
+        <button class="action" type="button" onclick={onLevels} aria-label="Levels">LVLS</button>
+    </div>
 
-<div class="dpad">
-    <button class="arrow up"    type="button" onclick={() => onMove(0, -1)} aria-label="Up">▲</button>
-    <button class="arrow left"  type="button" onclick={() => onMove(-1, 0)} aria-label="Left">◀</button>
-    <button class="arrow right" type="button" onclick={() => onMove(1, 0)}  aria-label="Right">▶</button>
-    <button class="arrow down"  type="button" onclick={() => onMove(0, 1)}  aria-label="Down">▼</button>
+    <div class="dpad">
+        <button
+            class="arrow up"
+            type="button"
+            onpointerdown={(e) => { e.preventDefault(); startHold(0, -1); }}
+            onpointerup={endHold}
+            onpointercancel={endHold}
+            onpointerleave={endHold}
+            aria-label="Up">▲</button>
+        <button
+            class="arrow left"
+            type="button"
+            onpointerdown={(e) => { e.preventDefault(); startHold(-1, 0); }}
+            onpointerup={endHold}
+            onpointercancel={endHold}
+            onpointerleave={endHold}
+            aria-label="Left">◀</button>
+        <button
+            class="arrow right"
+            type="button"
+            onpointerdown={(e) => { e.preventDefault(); startHold(1, 0); }}
+            onpointerup={endHold}
+            onpointercancel={endHold}
+            onpointerleave={endHold}
+            aria-label="Right">▶</button>
+        <button
+            class="arrow down"
+            type="button"
+            onpointerdown={(e) => { e.preventDefault(); startHold(0, 1); }}
+            onpointerup={endHold}
+            onpointercancel={endHold}
+            onpointerleave={endHold}
+            aria-label="Down">▼</button>
+    </div>
 </div>
 
 <style>
     /* Hidden by default. Coarse-pointer (touch) devices only. */
-    .dock-left,
-    .dpad {
+    .mobile-dock {
         display: none;
     }
 
     @media (pointer: coarse) {
+        .mobile-dock {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 12px;
+            width: 100%;
+            padding:
+                0
+                calc(12px + env(safe-area-inset-right))
+                calc(12px + env(safe-area-inset-bottom))
+                calc(12px + env(safe-area-inset-left));
+            box-sizing: border-box;
+        }
+
         .dock-left {
-            position: fixed;
-            bottom: calc(12px + env(safe-area-inset-bottom));
-            left: calc(12px + env(safe-area-inset-left));
             display: flex;
             flex-direction: column;
             gap: 8px;
-            z-index: 50;
         }
 
         .dpad {
-            position: fixed;
-            bottom: calc(12px + env(safe-area-inset-bottom));
-            right: calc(12px + env(safe-area-inset-right));
             display: grid;
             grid-template-columns: 56px 56px 56px;
             grid-template-rows: 56px 56px;
@@ -49,7 +136,6 @@
                 ".    up   .   "
                 "left down right";
             gap: 4px;
-            z-index: 50;
         }
     }
 
@@ -68,6 +154,12 @@
         cursor: pointer;
         user-select: none;
         -webkit-user-select: none;
+    }
+
+    .action.armed {
+        background: var(--danger);
+        color: #fff;
+        border-color: var(--danger);
     }
 
     .arrow {
