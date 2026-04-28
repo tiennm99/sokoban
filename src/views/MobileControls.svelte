@@ -120,7 +120,7 @@
             padding:
                 0
                 calc(12px + env(safe-area-inset-right))
-                calc(12px + env(safe-area-inset-bottom))
+                calc(20px + env(safe-area-inset-bottom))
                 calc(12px + env(safe-area-inset-left));
             box-sizing: border-box;
         }
