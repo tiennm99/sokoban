@@ -31,12 +31,12 @@
     {/key}
 {/if}
 
-{#if view !== 'game'}
-    <footer class="site-footer">
-        Made with <span class="heart">♥</span> by
-        <a href="https://miti99.com" target="_blank" rel="noopener noreferrer">miti99</a>
-    </footer>
-{/if}
+<!-- Footer always shows on desktop. On touch/mobile it's hidden during
+     gameplay so it can't overlap the on-screen D-pad / action stack. -->
+<footer class="site-footer" class:in-game={view === 'game'}>
+    Made with <span class="heart">♥</span> by
+    <a href="https://miti99.com" target="_blank" rel="noopener noreferrer">miti99</a>
+</footer>
 
 <style>
     .site-footer {
@@ -72,5 +72,9 @@
     @keyframes pulse {
         0%, 100% { transform: scale(1); }
         50%      { transform: scale(1.2); }
+    }
+
+    @media (pointer: coarse) {
+        .site-footer.in-game { display: none; }
     }
 </style>
