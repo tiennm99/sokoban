@@ -108,10 +108,13 @@
     }
 
     @media (pointer: coarse) {
+        /* stretch lets each column choose its own cross-axis position so the
+           D-pad can hug the dock top (closer to board) while the action stack
+           stays bottom-anchored (closer to thumb). */
         .mobile-dock {
             display: flex;
             justify-content: space-between;
-            align-items: flex-end;
+            align-items: stretch;
             gap: 12px;
             width: 100%;
             padding:
@@ -125,17 +128,19 @@
         .dock-left {
             display: flex;
             flex-direction: column;
+            justify-content: flex-end;
             gap: 8px;
         }
 
         .dpad {
             display: grid;
-            grid-template-columns: 56px 56px 56px;
-            grid-template-rows: 56px 56px;
+            grid-template-columns: 48px 48px 48px;
+            grid-template-rows: 48px 48px;
             grid-template-areas:
                 ".    up   .   "
                 "left down right";
-            gap: 4px;
+            gap: 6px;
+            align-self: flex-start;
         }
     }
 

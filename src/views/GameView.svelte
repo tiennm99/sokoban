@@ -43,7 +43,9 @@
         const minTile = 16;
         // Dock is now in-flow (flex row at bottom); margin only covers header + hud + padding.
         const isCoarse = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
-        const margin = isCoarse ? 220 : 120; // header + hud (+ in-flow mobile dock) + padding
+        // 195 reflects the slimmer mobile chrome after R6+R7 (top-aligned d-pad
+        // at 48px arrows). If the dock layout changes, retune this.
+        const margin = isCoarse ? 195 : 120; // header + hud (+ in-flow mobile dock) + padding
         const maxByWidth = Math.floor((window.innerWidth - 80) / level.width);
         const maxByHeight = Math.floor((window.innerHeight - margin - 100) / level.height);
         return Math.max(minTile, Math.min(maxTile, maxByWidth, maxByHeight));
