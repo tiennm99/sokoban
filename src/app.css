@@ -66,6 +66,12 @@ body {
     padding: 24px;
 }
 
+/* Touch devices: drop bottom padding (mobile dock owns its own
+   safe-area inset) and slim lateral padding so the board has more room. */
+@media (pointer: coarse) {
+    #app { padding: 12px 12px 0; }
+}
+
 button {
     font-family: inherit;
     touch-action: manipulation;

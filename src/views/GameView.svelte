@@ -245,10 +245,22 @@
         max-width: calc(100vw - 48px);
     }
 
-    /* On touch devices, hide the duplicated header action buttons —
-       MobileControls now occupies its own row at the bottom of the flex column. */
+    /* On touch devices: hide duplicated header action buttons (MobileControls
+       owns its own row at the bottom), tighten the column rhythm, and anchor
+       the puzzle to the bottom of .board-wrap so dead space accumulates above
+       the board (hidden behind HUD) instead of below it (between board and
+       dock). Closes the perceived "D-pad too far" gap on short puzzles. */
     @media (pointer: coarse) {
         .desktop-actions { display: none; }
+
+        .game { gap: 10px; }
+
+        .board-wrap {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            max-width: calc(100vw - 24px);
+        }
     }
 
     .error {
