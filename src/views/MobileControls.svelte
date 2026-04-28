@@ -158,6 +158,29 @@
         .action { height: 48px; }
     }
 
+    /* Landscape phones: dock becomes a narrow right column. Action stack
+       sits at the top, d-pad at the bottom so the arrows land in the
+       natural thumb arc for a two-handed grip. */
+    @media (pointer: coarse) and (orientation: landscape) {
+        .mobile-dock {
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            width: 160px;
+            gap: 12px;
+            padding:
+                12px
+                calc(8px + env(safe-area-inset-right))
+                calc(12px + env(safe-area-inset-bottom))
+                8px;
+        }
+
+        /* Override portrait's align-self: flex-start; in column layout the
+           cross axis is horizontal and we want the d-pad centered. */
+        .dpad { align-self: center; }
+        .dock-left { align-self: center; }
+    }
+
     /* Global `button` rules (touch-action, tap-highlight) live in app.css. */
     .action {
         min-width: 64px;

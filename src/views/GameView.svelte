@@ -41,13 +41,29 @@
         if (!level) return 48;
         const maxTile = 56;
         const minTile = 16;
-        // Dock is now in-flow (flex row at bottom); margin only covers header + hud + padding.
-        const isCoarse = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
-        // 195 reflects the slimmer mobile chrome after R6+R7 (top-aligned d-pad
-        // at 48px arrows). If the dock layout changes, retune this.
-        const margin = isCoarse ? 195 : 120; // header + hud (+ in-flow mobile dock) + padding
-        const maxByWidth = Math.floor((window.innerWidth - 80) / level.width);
-        const maxByHeight = Math.floor((window.innerHeight - margin - 100) / level.height);
+        const hasMM = typeof window !== 'undefined';
+        const isCoarse = hasMM && window.matchMedia('(pointer: coarse)').matches;
+        const isLandscape = hasMM && window.matchMedia('(orientation: landscape)').matches;
+
+        // Chrome reserve depends on layout:
+        //   coarse + landscape: dock lives in a side column, so vertical chrome
+        //     is just HUD + paddings (no in-flow dock below the board).
+        //   coarse + portrait : dock stacks under the board.
+        //   desktop           : HUD only.
+        let chromeY, chromeX;
+        if (isCoarse && isLandscape) {
+            chromeY = 76;
+            chromeX = 80 + 160; // base + side dock width
+        } else if (isCoarse) {
+            chromeY = 295;
+            chromeX = 80;
+        } else {
+            chromeY = 220;
+            chromeX = 80;
+        }
+
+        const maxByWidth = Math.floor((window.innerWidth - chromeX) / level.width);
+        const maxByHeight = Math.floor((window.innerHeight - chromeY) / level.height);
         return Math.max(minTile, Math.min(maxTile, maxByWidth, maxByHeight));
     }
 
@@ -127,14 +143,20 @@
         tileSize = computeTileSize();
     }
 
-    // Recompute tile size when pointer type changes (e.g. external keyboard
-    // attached/detached on iPad), so the bottom-controls reservation matches.
+    // Recompute tile size when pointer type or orientation changes — the
+    // chrome reserve differs between portrait (dock stacks below board) and
+    // landscape (dock moves to a side column), so the tile budget shifts.
     $effect(() => {
         if (typeof window === 'undefined') return;
-        const mq = window.matchMedia('(pointer: coarse)');
+        const mqCoarse = window.matchMedia('(pointer: coarse)');
+        const mqOrient = window.matchMedia('(orientation: landscape)');
         const handler = () => onResize();
-        mq.addEventListener('change', handler);
-        return () => mq.removeEventListener('change', handler);
+        mqCoarse.addEventListener('change', handler);
+        mqOrient.addEventListener('change', handler);
+        return () => {
+            mqCoarse.removeEventListener('change', handler);
+            mqOrient.removeEventListener('change', handler);
+        };
     });
 
     const hasNext = $derived(levelIndex + 1 < MICROBAN_LEVELS.length);
@@ -280,8 +302,12 @@
 
         .game { gap: 10px; }
 
+        /* Asymmetric padding-bottom shifts the safe-centered group upward by
+           roughly half the padding (~28px on a 915px viewport). Counters the
+           perceptual "low" feel caused by HUD top-weight + dock visual mass. */
         .play-stack {
             justify-content: safe center;
+            padding-bottom: clamp(16px, 6vh, 56px);
         }
 
         .play-group {
@@ -295,6 +321,28 @@
             max-width: calc(100vw - 24px);
             display: flex;
             justify-content: center;
+        }
+    }
+
+    /* Landscape phones: flip .play-group to a row so the dock occupies a
+       narrow right column instead of stacking below the board. Lets the board
+       claim the full vertical viewport (minus HUD), 3x the tile size on most
+       Microban levels. Drop the portrait upward-bias padding — the row layout
+       fills space differently. */
+    @media (pointer: coarse) and (orientation: landscape) {
+        .play-stack { padding-bottom: 0; }
+
+        .play-group {
+            flex: 1 1 auto;
+            flex-direction: row;
+            align-items: stretch;
+            gap: 12px;
+            max-height: none;
+        }
+
+        .board-wrap {
+            flex: 1 1 auto;
+            max-width: none;
         }
     }
 
