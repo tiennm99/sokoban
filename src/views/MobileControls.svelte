@@ -125,11 +125,21 @@
             box-sizing: border-box;
         }
 
+        /* Action buttons mirror the d-pad as a 2-row grid:
+             row 1: UNDO + RESET (matches UP row)
+             row 2: LVLS spans both columns (matches LEFT/DOWN/RIGHT row)
+           Both columns share the same row heights / gap so action and arrow
+           rows line up on the same Y. */
         .dock-left {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            gap: 8px;
+            display: grid;
+            grid-template-columns: auto auto;
+            grid-auto-rows: 48px;
+            gap: 6px;
+            align-self: flex-start;
+        }
+
+        .dock-left .action:nth-child(3) {
+            grid-column: 1 / -1;
         }
 
         .dpad {
@@ -142,6 +152,10 @@
             gap: 6px;
             align-self: flex-start;
         }
+
+        /* Match arrow height for grid-row alignment between action stack
+           and d-pad. Still well above the 44pt HIG minimum. */
+        .action { height: 48px; }
     }
 
     /* Global `button` rules (touch-action, tap-highlight) live in app.css. */
