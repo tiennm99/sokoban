@@ -1,5 +1,27 @@
 # Project Changelog
 
+## 2026-04-28 — Mobile Mistouch & Layout Fix
+
+### Fixed
+- **Footer mistouch during gameplay:** `miti99.com` link in the global footer was overlapping the D-pad/action-stack tap zones at the bottom of the screen. Footer now hidden on `view === 'game'` (`App.svelte`), visible only on Menu + Level Select.
+- **D-pad/board overlap on small viewports:** `MobileControls` no longer uses `position: fixed`. The dock-left + D-pad live in a single in-flow flex row at the bottom of `GameView`'s flex column. Board-wrap is now `flex: 1 1 auto; min-height: 0` so puzzles scroll within their wrapper, never under the controls. Magic `max-height: calc(100vh - 260px)` removed.
+- **Footer safe-area:** Added `env(safe-area-inset-bottom)` to `.site-footer` offset so it sits above the iPhone home-indicator gesture bar.
+- **WCAG-AA contrast:** Armed RESET button uses white text (4.85:1 on `--danger`) instead of `--bg` text (failed AA at 3.1:1).
+
+### Added
+- **Reset two-tap arming** (`MobileControls.svelte`): First tap on RESET arms (label flips "RESET" → "TAP AGAIN", red background, 2s timeout); second tap within the window restarts. Prevents mid-puzzle wipe-outs from a stray thumb. Keyboard `R` unchanged (immediate reset).
+- **D-pad press-and-hold repeat:** Holding any arrow continuously moves the player at 130 ms cadence (parity with keyboard `REPEAT_MS`). Implemented via Pointer Events (`pointerdown`/`pointerup`/`pointercancel`/`pointerleave`) + shared `setInterval`. `e.preventDefault()` on `pointerdown` suppresses the synthesized click double-fire.
+
+### Changed
+- `App.svelte`: Conditional footer render; safe-area offset on `.site-footer`.
+- `GameView.svelte`: `.game` is now `align-self: stretch; display: flex; flex-direction: column;` so it fills `#app`'s inner area without forcing page-scroll. `.board-wrap` becomes the flex-grow child. `computeTileSize` margin reduced from 260→220 (coarse) and 140→120 (fine) since the dock is no longer fixed-positioned.
+- `MobileControls.svelte`: Rewritten — drops fixed positioning + z-index, wraps dock-left + D-pad in `.mobile-dock` flex row, gains arming + hold-repeat state with `$effect` cleanup on unmount.
+
+### Notes
+- Bundle: 70.02 kB JS / 24.68 kB gzipped (no meaningful change).
+- Build clean. Manual smoke test pending on real iOS/Android.
+- Plan: `plans/260428-1004-mobile-mistouch-fix/`.
+
 ## 2026-04-27 — Mobile Comfort & PWA
 
 ### Added
