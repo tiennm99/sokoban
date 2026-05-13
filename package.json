@@ -3,6 +3,7 @@
   "description": "A simple Sokoban game built with Svelte 5 and Vite",
   "version": "1.0.0",
   "type": "module",
+  "packageManager": "pnpm@11.1.1",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tiennm99/sokoban.git"
@@ -25,8 +26,10 @@
     "vite": "^6.4.2",
     "vite-plugin-pwa": "^1.2.0"
   },
-  "overrides": {
-    "serialize-javascript": ">=7.0.5",
-    "fast-uri": ">=3.1.2"
+  "pnpm": {
+    "overrides": {
+      "serialize-javascript": ">=7.0.5",
+      "fast-uri": ">=3.1.2"
+    }
   }
 }

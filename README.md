@@ -17,9 +17,9 @@ Play: [https://tiennm99.github.io/sokoban/](https://tiennm99.github.io/sokoban/)
 ## Development
 
 ```bash
-npm install
-npm run dev          # dev server on http://localhost:8080
-npm run build        # production build
+pnpm install
+pnpm dev          # dev server on http://localhost:8080
+pnpm build        # production build
 ```
 
 ## Project layout
