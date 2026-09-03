@@ -1,6 +1,6 @@
 # Level Data License
 
-The puzzle layouts shipped in [`src/game/data/microban-levels.js`](src/game/data/microban-levels.js) are **not** covered by the repository's main [`LICENSE`](LICENSE). They are governed by the terms below.
+The puzzle layouts shipped in [`src/lib/data/microban-levels.js`](src/lib/data/microban-levels.js) are **not** covered by the repository's main [`LICENSE`](LICENSE). They are governed by the terms below.
 
 ## Microban
 
@@ -12,13 +12,15 @@ The puzzle layouts shipped in [`src/game/data/microban-levels.js`](src/game/data
 
 The set is distributed by David W. Skinner with permission to **freely redistribute** provided the layouts remain **properly credited** to him. This project relies on that grant. The credit is preserved in:
 
-- The file header of `src/game/data/microban-levels.js`.
+- The file header of `src/lib/data/microban-levels.js`.
 - The main menu of the game (bottom-of-screen attribution).
 - `README.md` and `docs/project-overview-pdr.md`.
 
 ## Scope
 
-This file applies **only to the puzzle layouts**. The parser, renderer, UI, progression system, and every other file in this repository are original work and are covered by the main `LICENSE`.
+This file applies **only to the Microban puzzle layouts**. The parser, renderer, UI, progression system, and every other file in this repository are original work and are covered by the main `LICENSE`.
+
+The bonus layouts in [`src/lib/data/bonus-levels.js`](src/lib/data/bonus-levels.js) are **not** Skinner's work. They are hand-designed for this project and fall under the main `LICENSE`.
 
 If you fork or redistribute this project:
 

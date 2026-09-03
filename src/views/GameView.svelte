@@ -11,14 +11,14 @@
     import { BoardModel } from '../lib/core/board-model.js';
     import { progressStore } from '../lib/core/progress-store.js';
     import { pulse } from '../lib/core/haptics.js';
-    import { MICROBAN_LEVELS } from '../lib/data/microban-levels.js';
+    import { LEVELS } from '../lib/data/levels.js';
 
     let { levelIndex, onMenu, onLevels, onNext } = $props();
 
     // --- Level setup (runs once because GameView is keyed on levelIndex in App) ---
     function buildLevel() {
         try {
-            const lv = parseLevel(MICROBAN_LEVELS[levelIndex]);
+            const lv = parseLevel(LEVELS[levelIndex]);
             if (!lv.player) throw new Error('Level has no player tile');
             return { level: lv, model: new BoardModel(lv), error: null };
         } catch (err) {
@@ -162,7 +162,7 @@
         };
     });
 
-    const hasNext = $derived(levelIndex + 1 < MICROBAN_LEVELS.length);
+    const hasNext = $derived(levelIndex + 1 < LEVELS.length);
 
     let donateOpen = $state(false);
 </script>

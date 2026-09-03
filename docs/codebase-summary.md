@@ -13,7 +13,9 @@ src/
 │   │   ├── progress-store.js       # localStorage persistence (completed + best moves)
 │   │   └── haptics.js              # navigator.vibrate wrapper (10ms on box push, 60ms on win)
 │   └── data/
-│       └── microban-levels.js      # 155 XSB level strings (Microban, D. W. Skinner)
+│       ├── microban-levels.js      # 155 XSB level strings (Microban, D. W. Skinner)
+│       ├── bonus-levels.js         # Hand-designed XSB levels (project's own, main LICENSE)
+│       └── levels.js               # Microban + bonus concatenated; single index space
 └── views/
     ├── MenuView.svelte             # Title, play, progress, hints
     ├── LevelSelectView.svelte      # Paginated 5×4 grid (20/page × 8 pages)
@@ -38,7 +40,7 @@ public/
 7. On win: `progressStore.recordCompletion()` + overlay with NEXT / LEVELS actions.
 
 ## Key design choices
-- **Framework-agnostic core.** `level-parser.js`, `board-model.js`, `progress-store.js`, `haptics.js`, and `microban-levels.js` contain zero Svelte — they could be lifted into any other stack.
+- **Framework-agnostic core.** `level-parser.js`, `board-model.js`, `progress-store.js`, `haptics.js`, `microban-levels.js`, `bonus-levels.js`, and `levels.js` contain zero Svelte — they could be lifted into any other stack.
 - **BoardModel as a non-reactive ref.** Svelte reactivity is driven by plain `$state` snapshot fields (`player`, `boxes`, `moves`, `won`) that `syncFromModel()` reassigns after every mutation. Cleaner than making the class instance itself reactive.
 - **Board is purely presentational.** Takes plain props (`walls`, `targets`, `floors`, `player`, `boxes`, `tileSize`) so Svelte reactivity is predictable. Desktop & mobile share the same component; `touch-action: none` blocks browser gestures on all devices.
 - **Mobile controls opt-in.** `MobileControls.svelte` is hidden on desktop via `@media (pointer: coarse)`, so no UA sniffing or JS feature detection — CSS media queries handle the split.

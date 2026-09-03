@@ -5,11 +5,11 @@
     import AppButton from './AppButton.svelte';
     import DonateModal from './DonateModal.svelte';
     import { progressStore } from '../lib/core/progress-store.js';
-    import { MICROBAN_LEVELS } from '../lib/data/microban-levels.js';
+    import { LEVELS } from '../lib/data/levels.js';
 
     let { onPlay } = $props();
 
-    const total = MICROBAN_LEVELS.length;
+    const total = LEVELS.length;
     const completed = progressStore.getCompletedCount();
 
     let donateOpen = $state(false);

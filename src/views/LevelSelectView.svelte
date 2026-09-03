@@ -5,12 +5,12 @@
 <script>
     import AppButton from './AppButton.svelte';
     import { progressStore } from '../lib/core/progress-store.js';
-    import { MICROBAN_LEVELS } from '../lib/data/microban-levels.js';
+    import { LEVELS, isBonusLevel } from '../lib/data/levels.js';
 
     let { onBack, onSelect } = $props();
 
     const PER_PAGE = 20;
-    const total = MICROBAN_LEVELS.length;
+    const total = LEVELS.length;
     const totalPages = Math.ceil(total / PER_PAGE);
 
     let page = $state(0);
@@ -29,7 +29,8 @@
             out.push({
                 index: i,
                 done: !!completed[i],
-                best: bestMoves[i] ?? null
+                best: bestMoves[i] ?? null,
+                bonus: isBonusLevel(i)
             });
         }
         return out;
@@ -61,6 +62,7 @@
             <button
                 class="level-btn"
                 class:done={level.done}
+                class:bonus={level.bonus}
                 type="button"
                 onclick={() => onSelect(level.index)}
             >
@@ -69,7 +71,7 @@
                     LEVEL {level.index + 1}
                 </span>
                 <span class="level-sub">
-                    {level.best != null ? `Best: ${level.best}` : 'Not played'}
+                    {level.bonus ? 'BONUS · ' : ''}{level.best != null ? `Best: ${level.best}` : 'Not played'}
                 </span>
             </button>
         {/each}
@@ -160,6 +162,18 @@
     .level-sub {
         font-size: 12px;
         color: var(--text-dim);
+    }
+
+    /* Bonus levels are the project's own hand-made puzzles, flagged so
+       they read as distinct from the Microban set. */
+    .level-btn.bonus {
+        border-color: var(--accent);
+    }
+
+    .level-btn.bonus .level-sub {
+        color: var(--accent);
+        font-weight: 700;
+        letter-spacing: 1px;
     }
 
     .check {
